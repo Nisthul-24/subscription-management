@@ -1,0 +1,396 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─── ENUMS ──────────────────────────────────────────────────────────────────────
+
+enum Role {
+  ADMIN
+  STAFF
+  CUSTOMER
+}
+
+enum BillingPeriod {
+  DAILY
+  WEEKLY
+  MONTHLY
+  YEARLY
+}
+
+enum SubscriptionStatus {
+  DRAFT
+  QUOTATION
+  CONFIRMED
+  ACTIVE
+  PAUSED
+  CLOSED
+}
+
+enum InvoiceStatus {
+  DRAFT
+  CONFIRMED
+  PAID
+  CANCELLED
+}
+
+enum DiscountType {
+  FIXED
+  PERCENTAGE
+}
+
+enum DiscountScope {
+  PRODUCT
+  SUBSCRIPTION
+}
+
+enum PaymentMethod {
+  BANK_TRANSFER
+  CREDIT_CARD
+  CASH
+  CHECK
+  OTHER
+}
+
+// ─── USER ───────────────────────────────────────────────────────────────────────
+// Customer is a User with role=CUSTOMER. Single table, no separate model.
+
+model User {
+  id               String    @id @default(uuid())
+  email            String    @unique
+  passwordHash     String
+  role             Role      @default(CUSTOMER)
+  firstName        String
+  lastName         String
+  phone            String?
+  company          String?
+  address          String?
+  resetToken       String?   @unique
+  resetTokenExpiry DateTime?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  subscriptions      Subscription[]
+  invoices           Invoice[]
+  paymentsRecorded   Payment[]    @relation("RecordedByUser")
+  statusLogs         StatusLog[]
+
+  @@index([role])
+  @@map("users")
+}
+
+// ─── PRODUCT & VARIANTS ─────────────────────────────────────────────────────────
+
+model Product {
+  id              String   @id @default(uuid())
+  name            String
+  type            String   @default("product") // "product" | "service"
+  salesPriceCents Int
+  costPriceCents  Int      @default(0)
+  notes           String?
+  active          Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  attributes        ProductAttribute[]
+  subscriptionLines SubscriptionLine[]
+  invoiceLines      InvoiceLine[]
+  quotationLines    QuotationTemplateLine[]
+  discountRules     DiscountRuleProduct[]
+
+  @@index([active])
+  @@map("products")
+}
+
+model ProductAttribute {
+  id        String   @id @default(uuid())
+  productId String
+  name      String   // e.g. "Brand"
+  createdAt DateTime @default(now())
+
+  product  Product          @relation(fields: [productId], references: [id], onDelete: Cascade)
+  variants ProductVariant[]
+
+  @@map("product_attributes")
+}
+
+model ProductVariant {
+  id              String   @id @default(uuid())
+  attributeId     String
+  value           String   // e.g. "Odoo"
+  extraPriceCents Int      // added to base price
+  createdAt       DateTime @default(now())
+
+  attribute         ProductAttribute    @relation(fields: [attributeId], references: [id], onDelete: Cascade)
+  subscriptionLines SubscriptionLine[]
+  invoiceLines      InvoiceLine[]
+  quotationLines    QuotationTemplateLine[]
+
+  @@map("product_variants")
+}
+
+// ─── TAX RULES ──────────────────────────────────────────────────────────────────
+
+model TaxRule {
+  id            String   @id @default(uuid())
+  name          String   // e.g. "GST 18%"
+  rateBps       Int      // basis points: 1800 = 18.00%
+  applicability String   @default("ALL") // "ALL" | "PRODUCT" | "SERVICE"
+  active        Boolean  @default(true)
+  createdAt     DateTime @default(now())
+
+  subscriptionLineTaxes SubscriptionLineTax[]
+  invoiceLines          InvoiceLine[]
+
+  @@map("tax_rules")
+}
+
+// ─── PLANS ──────────────────────────────────────────────────────────────────────
+
+model Plan {
+  id             String        @id @default(uuid())
+  name           String
+  priceCents     Int
+  billingPeriod  BillingPeriod
+  minQuantity    Int           @default(1)
+  availableFrom  DateTime?
+  availableTo    DateTime?
+  autoCloseAtEnd Boolean       @default(false)
+  closableEarly  Boolean       @default(true)
+  pausable       Boolean       @default(false)
+  renewable      Boolean       @default(true)
+  active         Boolean       @default(true)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  subscriptions      Subscription[]
+  quotationTemplates QuotationTemplate[]
+
+  @@index([active])
+  @@map("plans")
+}
+
+// ─── DISCOUNT RULES ─────────────────────────────────────────────────────────────
+
+model DiscountRule {
+  id               String        @id @default(uuid())
+  name             String
+  discountType     DiscountType
+  valueCents       Int           @default(0) // for FIXED type
+  valueBps         Int           @default(0) // for PERCENTAGE type (basis points)
+  minPurchaseCents Int           @default(0)
+  minQuantity      Int           @default(0)
+  startDate        DateTime?
+  endDate          DateTime?
+  usageLimit       Int?          // NULL = unlimited
+  usageCount       Int           @default(0)
+  scope            DiscountScope
+  active           Boolean       @default(true)
+  createdAt        DateTime      @default(now())
+
+  products     DiscountRuleProduct[]
+  invoiceLines InvoiceLine[]
+
+  @@map("discount_rules")
+}
+
+model DiscountRuleProduct {
+  discountRuleId String
+  productId      String
+
+  discountRule DiscountRule @relation(fields: [discountRuleId], references: [id], onDelete: Cascade)
+  product      Product     @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@id([discountRuleId, productId])
+  @@map("discount_rule_products")
+}
+
+// ─── QUOTATION TEMPLATES ────────────────────────────────────────────────────────
+
+model QuotationTemplate {
+  id        String   @id @default(uuid())
+  name      String
+  planId    String
+  validDays Int      @default(30)
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  plan  Plan                    @relation(fields: [planId], references: [id])
+  lines QuotationTemplateLine[]
+
+  @@map("quotation_templates")
+}
+
+model QuotationTemplateLine {
+  id             String  @id @default(uuid())
+  templateId     String
+  productId      String
+  variantId      String?
+  quantity       Int     @default(1)
+  unitPriceCents Int
+
+  template QuotationTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  product  Product           @relation(fields: [productId], references: [id])
+  variant  ProductVariant?   @relation(fields: [variantId], references: [id])
+
+  @@map("quotation_template_lines")
+}
+
+// ─── SUBSCRIPTIONS ──────────────────────────────────────────────────────────────
+
+model Subscription {
+  id               String             @id @default(uuid())
+  number           String             @unique
+  customerId       String
+  planId           String
+  status           SubscriptionStatus @default(DRAFT)
+  startDate        DateTime
+  expiryDate       DateTime?
+  paymentTermsDays Int                @default(15)
+  nextBillingDate  DateTime?
+  notes            String?
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+
+  customer User   @relation(fields: [customerId], references: [id])
+  plan     Plan   @relation(fields: [planId], references: [id])
+  lines    SubscriptionLine[]
+  invoices Invoice[]
+
+  @@index([status, nextBillingDate])
+  @@index([customerId, status])
+  @@map("subscriptions")
+}
+
+model SubscriptionLine {
+  id             String  @id @default(uuid())
+  subscriptionId String
+  productId      String
+  variantId      String?
+  quantity       Int     @default(1)
+  unitPriceCents Int
+
+  subscription Subscription        @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+  product      Product             @relation(fields: [productId], references: [id])
+  variant      ProductVariant?     @relation(fields: [variantId], references: [id])
+  taxes        SubscriptionLineTax[]
+
+  @@map("subscription_lines")
+}
+
+model SubscriptionLineTax {
+  id                 String @id @default(uuid())
+  subscriptionLineId String
+  taxRuleId          String
+
+  subscriptionLine SubscriptionLine @relation(fields: [subscriptionLineId], references: [id], onDelete: Cascade)
+  taxRule          TaxRule          @relation(fields: [taxRuleId], references: [id])
+
+  @@unique([subscriptionLineId, taxRuleId])
+  @@map("subscription_line_taxes")
+}
+
+// ─── STATUS LOG (AUDIT TRAIL) ───────────────────────────────────────────────────
+
+model StatusLog {
+  id          String   @id @default(uuid())
+  entityType  String   // "SUBSCRIPTION" | "INVOICE"
+  entityId    String
+  fromStatus  String
+  toStatus    String
+  changedById String?
+  reason      String?
+  changedAt   DateTime @default(now())
+
+  changedBy User? @relation(fields: [changedById], references: [id])
+
+  @@index([entityType, entityId])
+  @@map("status_logs")
+}
+
+// ─── SEQUENCE (GAP-FREE NUMBERING) ─────────────────────────────────────────────
+
+model Sequence {
+  prefix    String @id // e.g. "SUB-202610" or "INV-202610"
+  lastValue Int    @default(0)
+
+  @@map("sequences")
+}
+
+// ─── INVOICES ───────────────────────────────────────────────────────────────────
+
+model Invoice {
+  id               String        @id @default(uuid())
+  number           String        @unique
+  subscriptionId   String
+  customerId       String
+  status           InvoiceStatus @default(DRAFT)
+  invoiceDate      DateTime
+  dueDate          DateTime
+  billingPeriodKey String        // "{subscriptionId}_{periodStart}" for idempotency
+  subtotalCents    Int           @default(0)
+  discountCents    Int           @default(0)
+  taxCents         Int           @default(0)
+  totalCents       Int           @default(0)
+  paidCents        Int           @default(0)
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  subscription Subscription @relation(fields: [subscriptionId], references: [id])
+  customer     User         @relation(fields: [customerId], references: [id])
+  lines        InvoiceLine[]
+  payments     Payment[]
+
+  @@unique([subscriptionId, billingPeriodKey])
+  @@index([status, dueDate])
+  @@index([customerId, status])
+  @@index([invoiceDate])
+  @@map("invoices")
+}
+
+model InvoiceLine {
+  id             String  @id @default(uuid())
+  invoiceId      String
+  productId      String
+  variantId      String?
+  description    String
+  quantity       Int
+  unitPriceCents Int
+  lineTotalCents Int
+  discountCents  Int     @default(0)
+  discountRuleId String?
+  taxCents       Int     @default(0)
+  taxRuleId      String?
+  taxRateBps     Int     @default(0)
+
+  invoice      Invoice        @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  product      Product        @relation(fields: [productId], references: [id])
+  variant      ProductVariant? @relation(fields: [variantId], references: [id])
+  discountRule DiscountRule?  @relation(fields: [discountRuleId], references: [id])
+  taxRule      TaxRule?       @relation(fields: [taxRuleId], references: [id])
+
+  @@map("invoice_lines")
+}
+
+// ─── PAYMENTS ───────────────────────────────────────────────────────────────────
+
+model Payment {
+  id           String        @id @default(uuid())
+  invoiceId    String
+  method       PaymentMethod
+  amountCents  Int
+  paymentDate  DateTime
+  note         String?
+  recordedById String
+  createdAt    DateTime      @default(now())
+
+  invoice    Invoice @relation(fields: [invoiceId], references: [id])
+  recordedBy User    @relation("RecordedByUser", fields: [recordedById], references: [id])
+
+  @@index([invoiceId])
+  @@index([paymentDate])
+  @@map("payments")
+}
