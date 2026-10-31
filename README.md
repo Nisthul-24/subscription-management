@@ -1,65 +1,159 @@
-# Brightloop Subscription Management System
+# 🚀 Brightloop Subscription Management System
 
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue.svg)](https://www.typescriptlang.org/)
-[![Next.js](https://img.shields.io/badge/Next.js-16.4-black.svg)](https://nextjs.org/)
-[![Prisma](https://img.shields.io/badge/Prisma-7.10-teal.svg)](https://www.prisma.io/)
-[![Tailwind CSS](https://img.shields.io/badge/TailwindCSS-v4-38bdf8.svg)](https://tailwindcss.com/)
-[![Tests](https://img.shields.io/badge/Tests-28%20Passing-brightgreen.svg)]()
+[![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=white)](https://reactjs.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-20-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-7.0-47A248?logo=mongodb&logoColor=white)](https://www.mongodb.com/)
+[![Express](https://img.shields.io/badge/Express.js-4.x-000000?logo=express&logoColor=white)](https://expressjs.com/)
+[![Tailwind CSS](https://img.shields.io/badge/TailwindCSS-3.x-38BDF8?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+[![JWT](https://img.shields.io/badge/Auth-JWT-FB015B?logo=jsonwebtokens&logoColor=white)](https://jwt.io/)
+[![License](https://img.shields.io/badge/License-Proprietary-red.svg)]()
 
-> **Brightloop** is an enterprise-grade, unified subscription management, automated billing, payment recording, and recurring revenue analytics platform built for SaaS businesses. It replaces spreadsheets, hand-typed invoices, and manual bank-statement matching with an automated, audit-logged billing engine.
-
----
-
-## 🌟 Key Features
-
-- **Products & Dynamic Variants**: Base products (services or goods) with customizable attributes and variant pricing (e.g. Hosting Tiers, Support Packages).
-- **Flexible Subscription Plans**: Daily, Weekly, Monthly, and Yearly cadence with guard rules:
-  - `pausable`: Controls whether active subscriptions can be temporarily paused.
-  - `closableEarly`: Restricts early cancellations before the contract period concludes.
-  - `autoCloseAtEnd`: Automatically transitions active subscriptions to `CLOSED` upon reaching expiry date.
-  - `renewable`: Dictates renewal eligibility.
-- **Discount Engine**: Fixed amount or percentage discounts scoped to subscriptions or individual products. Implements **highest-value-wins** automatic resolution and atomic usage limit decrementing.
-- **Basis Points (bps) Tax Calculation**: Tax-exclusive pricing with basis points (e.g., `1800` = `18.00%`) using standard **half-up rounding** (`roundHalfUp`), avoiding floating-point rounding errors.
-- **Monotonic Gap-Free Sequencing**: Format-compliant, sequential numbering for Subscriptions (`SUB-YYYYMM-XXXXX`) and Invoices (`INV-YYYYMM-XXXXX`) using atomic sequence generation.
-- **Automated Catch-up Billing Engine**:
-  - **Idempotent**: Enforced via unique database constraint on `(subscriptionId, billingPeriodKey)`.
-  - **Catch-up**: Automatically detects and bills all missed billing intervals if a scheduler was offline.
-  - **Auto-close**: Detects and cleanly marks contracts `CLOSED` when reaching expiry date.
-- **Audit Logging**: Every status transition (Draft ➔ Quotation ➔ Confirmed ➔ Active ➔ Paused ➔ Closed) is immutably recorded in `status_logs` with timestamps, author IDs, and reasons.
-- **Invoicing & PDF Generation**: Instant generation and streaming of PDF invoices via `@react-pdf/renderer` with download endpoints.
-- **Customer Portal**: Isolated self-service view allowing clients to view active subscriptions, review billing history, and download PDF invoices.
-- **Live Recurring Revenue Analytics**: Real-time KPI dashboard computing **MRR**, **ARR**, outstanding receivables, overdue invoices, 6-month historical revenue trends, and payment method distribution in under 2 seconds even with 20,000+ invoices.
+> **Brightloop** is a full-stack, enterprise-grade **Subscription Management Platform** built for SaaS businesses. It replaces manual spreadsheets and billing processes with a fully automated, centralized system — handling the complete subscription lifecycle from customer onboarding to revenue reporting.
 
 ---
 
-## 🏛️ System Architecture & Domain Rules
+## ✨ Key Features
 
-### 1. Currency & Arithmetic Invariants
-- All monetary values are strictly represented as **integer cents** (e.g., `$49.00` = `4900`). Floating-point currency arithmetic is prohibited.
-- Tax rates are stored in **basis points (bps)** (`1%` = `100 bps`, `18.5%` = `1850 bps`).
-- Rounding follows the financial standard **half-up** rounding (`Math.floor(x + 0.5)`).
+| Module | Highlights |
+|---|---|
+| 🔐 **Authentication** | JWT-based auth, role-based access (Admin / Staff / Customer), forgot/reset password |
+| 📦 **Product Management** | Products with variants, pricing, search & filter |
+| 📋 **Subscription Plans** | Daily / Weekly / Monthly / Yearly billing, auto-close, pause & resume |
+| 📝 **Quotations** | Reusable templates, unique numbering, convert to subscriptions |
+| 🔄 **Subscriptions** | Full lifecycle: Draft → Quotation → Confirmed → Active → Closed |
+| 🧾 **Invoice Engine** | Auto-generated, recurring, PDF downloadable, duplicate-safe |
+| 💳 **Payments** | Multi-method payment recording, overdue tracking, payment history |
+| 🎟️ **Discounts** | Fixed / percentage discounts, usage limits, product-specific or subscription-wide |
+| 🧮 **Taxes** | Configurable tax rules applied automatically during billing |
+| 📊 **Dashboard & Reports** | MRR, ARR, revenue charts, subscription status distribution, date-range filters |
 
-### 2. Subscription State Machine
-```mermaid
-stateDiagram-v2
-    [*] --> DRAFT
-    DRAFT --> QUOTATION: submit_quotation
-    QUOTATION --> CONFIRMED: confirm
-    CONFIRMED --> ACTIVE: activate
-    ACTIVE --> PAUSED: pause (if plan.pausable)
-    PAUSED --> ACTIVE: resume
-    ACTIVE --> CLOSED: close (if plan.closableEarly or autoCloseAtEnd)
-    PAUSED --> CLOSED: close
+---
+
+## 🏗️ Technology Stack
+
+### Frontend
+- **React.js** — Component-based UI
+- **Tailwind CSS** — Utility-first styling
+- **Recharts** — Interactive revenue & analytics charts
+- **Lucide React** — Modern icon library
+
+### Backend
+- **Node.js & Express.js** — RESTful API server
+- **MongoDB** — Document database
+- **Mongoose** — ODM with schema validation & indexing
+- **JWT** — Stateless authentication & authorization
+- **bcrypt** — Secure password hashing
+- **Nodemailer** — Email delivery for password reset
+
+---
+
+## 👤 User Roles
+
+### 🛡️ Admin
+- Full system access
+- Manage products, plans, taxes, discounts
+- Create and manage staff accounts
+- View financial reports and dashboards
+
+### 👨‍💼 Staff
+- Manage customers and subscriptions
+- Create quotations and invoices
+- Record payments
+- Permission-limited access
+
+### 🙋 Customer
+- Self-service portal
+- View active subscriptions
+- Download PDF invoices
+- Track payment history
+
+---
+
+## 🔄 Subscription State Machine
+
+```
+Draft → Quotation → Confirmed → Active → Closed
+                                  ↕
+                                Paused
 ```
 
-### 3. Invoice State Machine
-```mermaid
-stateDiagram-v2
-    [*] --> DRAFT
-    DRAFT --> CONFIRMED: confirm
-    DRAFT --> CANCELLED: cancel
-    CONFIRMED --> PAID: record_payment (paidCents >= totalCents)
-    CONFIRMED --> CANCELLED: cancel
+## 🧾 Invoice State Machine
+
+```
+Draft → Confirmed → Paid
+  ↓          ↓
+Cancelled  Cancelled
+```
+
+---
+
+## 📂 Project Structure
+
+```
+subscription-management/
+├── client/                     # React.js Frontend
+│   ├── src/
+│   │   ├── components/         # Reusable UI components
+│   │   │   ├── layout/         # Sidebar, Header, AppShell
+│   │   │   └── ui/             # Badges, Modals, Tables, Charts
+│   │   ├── pages/
+│   │   │   ├── auth/           # Login, Register, Forgot/Reset Password
+│   │   │   ├── dashboard/      # Admin analytics dashboard
+│   │   │   ├── products/       # Product management
+│   │   │   ├── plans/          # Subscription plan management
+│   │   │   ├── customers/      # Customer directory
+│   │   │   ├── subscriptions/  # Subscription lifecycle management
+│   │   │   ├── quotations/     # Quotation creation & conversion
+│   │   │   ├── invoices/       # Invoice listing, detail, PDF
+│   │   │   ├── payments/       # Payment recording & history
+│   │   │   ├── discounts/      # Discount rule management
+│   │   │   ├── taxes/          # Tax configuration
+│   │   │   └── portal/         # Customer self-service portal
+│   │   ├── context/            # AuthContext, global state
+│   │   ├── hooks/              # Custom React hooks
+│   │   └── utils/              # API client, formatters, helpers
+│   └── package.json
+│
+├── server/                     # Node.js + Express Backend
+│   ├── src/
+│   │   ├── models/             # Mongoose schemas
+│   │   │   ├── User.js
+│   │   │   ├── Product.js
+│   │   │   ├── Plan.js
+│   │   │   ├── Customer.js
+│   │   │   ├── Subscription.js
+│   │   │   ├── Invoice.js
+│   │   │   ├── Payment.js
+│   │   │   ├── Discount.js
+│   │   │   └── Tax.js
+│   │   ├── routes/             # Express route handlers
+│   │   │   ├── auth.js
+│   │   │   ├── products.js
+│   │   │   ├── plans.js
+│   │   │   ├── customers.js
+│   │   │   ├── subscriptions.js
+│   │   │   ├── quotations.js
+│   │   │   ├── invoices.js
+│   │   │   ├── payments.js
+│   │   │   ├── discounts.js
+│   │   │   ├── taxes.js
+│   │   │   └── dashboard.js
+│   │   ├── middleware/
+│   │   │   ├── auth.js         # JWT verification
+│   │   │   └── roleGuard.js    # Role-based access control
+│   │   ├── services/
+│   │   │   ├── billingEngine.js    # Automated recurring billing
+│   │   │   ├── invoiceGenerator.js # Invoice creation & PDF
+│   │   │   └── emailService.js     # Nodemailer email dispatch
+│   │   ├── utils/
+│   │   │   ├── sequencer.js    # Unique SUB/INV number generator
+│   │   │   └── validators.js   # Input validation helpers
+│   │   └── app.js
+│   ├── seed/
+│   │   └── seed.js             # Sample data seeder
+│   └── package.json
+│
+└── README.md
 ```
 
 ---
@@ -67,174 +161,197 @@ stateDiagram-v2
 ## 🚀 Getting Started
 
 ### Prerequisites
-- **Node.js**: v20 or higher
-- **PostgreSQL**: Local PostgreSQL daemon or Docker
+- **Node.js** v18 or higher
+- **MongoDB** v6+ (local or [MongoDB Atlas](https://www.mongodb.com/cloud/atlas))
+- **npm** or **yarn**
 
-### 1. Database Setup
+---
 
-You can run PostgreSQL either with the bundled Prisma Dev daemon or using Docker Compose:
+### 1. Clone the Repository
 
-#### Option A: Prisma Dev Embedded PostgreSQL (Recommended for Local Dev)
 ```bash
-# Starts embedded PostgreSQL daemon on localhost:51214
-npx prisma dev
+git clone https://github.com/Nisthul-24/subscription-management.git
+cd subscription-management
 ```
 
-#### Option B: Docker Compose
+---
+
+### 2. Backend Setup
+
 ```bash
-docker compose up -d
+cd server
+npm install
 ```
 
-### 2. Environment Configuration
-Ensure `.env` contains:
+Create a `.env` file in the `server/` directory:
+
 ```env
-DATABASE_URL="postgres://postgres:postgres@localhost:51214/template1?sslmode=disable"
-JWT_SECRET="brightloop-super-secure-production-jwt-secret-key-32chars"
-PORT=3000
+PORT=5000
+MONGODB_URI=mongodb://localhost:27017/brightloop
+JWT_SECRET=your_super_secret_jwt_key_min_32_chars
+JWT_REFRESH_SECRET=your_refresh_secret_key
+JWT_EXPIRES_IN=15m
+JWT_REFRESH_EXPIRES_IN=7d
+
+# Email (for password reset)
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=your_email@gmail.com
+SMTP_PASS=your_app_password
+
+# Frontend URL (for CORS and reset links)
+CLIENT_URL=http://localhost:3000
 ```
 
-### 3. Schema Push & Seeding
-```bash
-# Sync schema with database
-npx prisma db push
+Start the backend server:
 
-# Generate Prisma Client
-npx prisma generate
-
-# Seed initial demo accounts, plans, tax rules, and products
-npx -y tsx prisma/seed.ts
-```
-
-### 4. Running the Web Application
 ```bash
 npm run dev
 ```
-Open **[http://localhost:3000](http://localhost:3000)** in your browser.
 
-### 5. Running the Background Billing Worker
-The billing worker can be launched as a standalone background process:
-```bash
-npm run worker
-```
-By default, the worker runs an automated catch-up billing sweep every 60 seconds (configurable via `BILLING_INTERVAL_SECONDS`).
+> Server runs on **http://localhost:5000**
 
 ---
 
-## 🔑 Demo Accounts & Credentials
+### 3. Seed Sample Data
 
-| Role | Email | Password | Access Level |
-| :--- | :--- | :--- | :--- |
-| **Admin** | `admin@brightloop.dev` | `Admin@123!` | Full system access (products, plans, taxes, billing runs, analytics) |
-| **Staff** | `staff@brightloop.dev` | `Staff@123!` | Subscriptions, invoices, customers, payment recording |
-| **Customer** | `customer@brightloop.dev` | `Customer@123!` | Dedicated Customer Portal (view own subscriptions & invoices) |
+```bash
+cd server
+npm run seed
+```
 
-> **Password Policy**: Passwords require a minimum of 9 characters, at least 1 uppercase letter, 1 lowercase letter, and 1 special character.
+This creates:
+- Admin, Staff, and Customer demo accounts
+- Sample products, plans, taxes, discounts
+- Sample customers, subscriptions, and invoices
+
+**Demo Credentials:**
+
+| Role | Email | Password |
+|---|---|---|
+| Admin | admin@brightloop.com | Admin@1234! |
+| Staff | staff@brightloop.com | Staff@1234! |
+| Customer | customer@brightloop.com | Customer@1234! |
 
 ---
 
-## 🧪 Testing & Validation
+### 4. Frontend Setup
 
-### Running Unit Tests
-Unit tests test monetary arithmetic, basis points, half-up rounding, state transitions, plan guards, and billing date intervals:
 ```bash
-npm run test
+cd client
+npm install
 ```
-**Results**: 28 passing unit tests across `money.test.ts`, `status-machine.test.ts`, `auth.test.ts`, and `billing.test.ts`.
 
-### Performance & High-Volume Validation
-Brightloop includes a high-volume seeding script generating **5,000 subscriptions**, **22,500+ invoices**, and **20,000+ payments** to validate production performance:
+Create a `.env` file in the `client/` directory:
+
+```env
+REACT_APP_API_URL=http://localhost:5000/api
+```
+
+Start the frontend:
+
 ```bash
-# Run high-volume seed (takes ~30s)
-npm run seed:large
-
-# Run performance verification test
-npx -y tsx tests/perf-test.ts
+npm start
 ```
 
-**Benchmark Results**:
-- **Dataset**: 500 customers, 5,000 subscriptions, 22,501 invoices, 20,251 payments.
-- **Direct Database Counts**: ~180ms.
-- **Live Dashboard Load Time**: **1.51 seconds** (SLA target: < 2.0s).
-- **MRR & ARR Calculation**: Instantaneous aggregate query with active subscription line rollups.
-
----
-
-## 📂 Project Structure
-
-```
-brightloop/
-├── prisma/
-│   ├── schema.prisma       # Complete schema (Users, Plans, Products, Subscriptions, Invoices, Payments, StatusLog)
-│   ├── seed.ts             # Initial base demo seed
-│   └── seed-large.ts       # Bulk production scale seed (5k subs, 22k invoices)
-├── src/
-│   ├── app/
-│   │   ├── (auth)/         # Signin, Signup, Forgot Password, Reset Password
-│   │   ├── dashboard/      # Admin/Staff Executive Analytics Dashboard
-│   │   ├── subscriptions/  # Subscriptions management & creation
-│   │   ├── invoices/       # Invoices list, details, payments, PDF downloads
-│   │   ├── customers/      # Customer directory
-│   │   ├── portal/         # Customer self-service portal
-│   │   └── api/            # 20+ REST API endpoints with role guards
-│   ├── components/
-│   │   ├── layout/         # AppShell, Sidebar, Header
-│   │   └── ui/             # Form controls, badges, modals, charts
-│   ├── lib/
-│   │   ├── db.ts           # PrismaClient with PrismaPg adapter & connection pool
-│   │   ├── money.ts        # Cent arithmetic, formatMoney, half-up rounding
-│   │   ├── sequence.ts     # Atomic monotonic gap-free sequence generator
-│   │   ├── status-machine.ts# Plan-guarded state machines
-│   │   ├── discount.ts     # Discount priority resolution & atomic decrement
-│   │   ├── tax.ts          # Basis points tax engine
-│   │   ├── auth.ts         # JWT access & refresh tokens, cookies, role guards
-│   │   ├── pdf.tsx         # @react-pdf/renderer invoice template
-│   │   └── billing.ts      # Automated catch-up billing engine & auto-closer
-│   └── workers/
-│       ├── scheduler.ts    # Standalone interval billing runner
-│       └── bullmq.worker.ts# BullMQ distributed queue worker (when Redis is configured)
-├── tests/
-│   ├── money.test.ts
-│   ├── status-machine.test.ts
-│   ├── auth.test.ts
-│   ├── billing.test.ts
-│   └── perf-test.ts
-└── README.md
-```
+> App runs on **http://localhost:3000**
 
 ---
 
 ## 📡 API Reference
 
 ### Authentication
-- `POST /api/auth/signup`: User registration with strict password validation.
-- `POST /api/auth/signin`: Authenticate with HTTP-only cookies (`accessToken` 15m, `refreshToken` 7d).
-- `POST /api/auth/signout`: Invalidate and clear auth cookies.
-- `GET /api/auth/me`: Fetch authenticated user profile.
-- `POST /api/auth/forgot-password`: Dispatch password reset token.
-- `POST /api/auth/reset-password`: Reset password with secure one-time token.
+| Method | Endpoint | Description |
+|---|---|---|
+| POST | `/api/auth/register` | Register new user |
+| POST | `/api/auth/login` | Login and receive JWT |
+| POST | `/api/auth/forgot-password` | Request password reset email |
+| POST | `/api/auth/reset-password` | Reset password with token |
+| GET | `/api/auth/me` | Get current user profile |
 
-### Subscriptions & Invoices
-- `GET /api/subscriptions`: Paginated subscriptions with status filter.
-- `POST /api/subscriptions`: Create subscription with lines and tax assignments.
-- `GET /api/subscriptions/:id`: Retrieve subscription details and line items.
-- `POST /api/subscriptions/:id/transition`: Execute state transition (`submit_quotation`, `confirm`, `activate`, `pause`, `resume`, `close`).
-- `GET /api/invoices`: Paginated invoice listing with status/customer filters.
-- `GET /api/invoices/:id`: Invoice detail with lines and recorded payments.
-- `GET /api/invoices/:id/pdf`: Stream compiled PDF invoice buffer.
-- `POST /api/invoices/:id/action`: Execute invoice state transition (`confirm`, `cancel`).
-- `POST /api/payments`: Record payment against an invoice (updates `paidCents` and auto-marks `PAID`).
+### Products & Plans
+| Method | Endpoint | Description |
+|---|---|---|
+| GET/POST | `/api/products` | List / Create products |
+| GET/PUT/DELETE | `/api/products/:id` | Get / Update / Delete product |
+| GET/POST | `/api/plans` | List / Create subscription plans |
+| GET/PUT/DELETE | `/api/plans/:id` | Get / Update / Delete plan |
 
-### Administration & Billing
-- `POST /api/admin/billing/run`: Manually trigger billing run for arbitrary date (auto-generates invoices & closes expired subscriptions).
-- `GET /api/dashboard`: Fetch live KPIs (Active Subs, MRR, ARR, Total Revenue, Outstanding, 6-Month Trend, Payment Methods).
-- `GET /api/reports/export`: Export CSV reports for Subscriptions, Invoices, or Payments.
+### Customers & Subscriptions
+| Method | Endpoint | Description |
+|---|---|---|
+| GET/POST | `/api/customers` | List / Create customers |
+| GET/POST | `/api/subscriptions` | List / Create subscriptions |
+| POST | `/api/subscriptions/:id/transition` | Change subscription status |
+| GET/POST | `/api/quotations` | List / Create quotations |
+| POST | `/api/quotations/:id/convert` | Convert quotation to subscription |
 
-### Customer Portal
-- `GET /api/portal/subscriptions`: List customer's own subscriptions.
-- `GET /api/portal/invoices`: List customer's own invoices.
-- `POST /api/portal/subscriptions/:id/action`: Self-service quotation confirmation or cancellation.
+### Invoices & Payments
+| Method | Endpoint | Description |
+|---|---|---|
+| GET/POST | `/api/invoices` | List / Generate invoices |
+| POST | `/api/invoices/:id/action` | Confirm / Cancel invoice |
+| GET | `/api/invoices/:id/pdf` | Download PDF invoice |
+| GET/POST | `/api/payments` | List / Record payments |
+
+### Admin & Reporting
+| Method | Endpoint | Description |
+|---|---|---|
+| POST | `/api/admin/billing/run` | Manually trigger billing engine |
+| GET | `/api/dashboard` | Live KPIs and analytics |
+| GET | `/api/reports/export` | Export CSV reports |
+
+### Discounts & Taxes
+| Method | Endpoint | Description |
+|---|---|---|
+| GET/POST | `/api/discounts` | List / Create discount rules |
+| GET/PUT/DELETE | `/api/discounts/:id` | Manage discounts |
+| GET/POST | `/api/taxes` | List / Create tax rules |
 
 ---
 
-## 📄 License
-Brightloop is proprietary software. All rights reserved.
+## 📊 Dashboard KPIs
+
+- 📈 **Total Active Subscriptions**
+- 👥 **Total Customers**
+- 💰 **Total Revenue (MRR / ARR)**
+- ⏳ **Outstanding Payments**
+- ⚠️ **Overdue Invoices**
+- 📅 **Upcoming Renewals**
+- 📉 **6-Month Revenue Trend Chart**
+- 🍩 **Subscription Status Distribution**
+- 💳 **Payment Method Breakdown**
+
+---
+
+## 🔒 Security
+
+- ✅ Passwords hashed with **bcrypt** (salt rounds: 12)
+- ✅ Stateless **JWT** authentication with short-lived access tokens
+- ✅ **Role-based access control** on all API routes
+- ✅ Input validation and sanitization on all endpoints
+- ✅ Duplicate invoice prevention via unique billing period constraints
+- ✅ MongoDB **indexing** on frequently queried fields
+- ✅ CORS protection and HTTP-only cookies
+
+---
+
+## ⚡ Performance
+
+- Dashboard loads under **2 seconds** with 5,000+ subscriptions
+- Billing engine handles **batch invoice generation** with idempotency checks
+- Optimized MongoDB aggregate queries for revenue analytics
+- Lazy-loaded pages and code-splitting on the frontend
+
+---
+
+## 📜 License
+
+**Brightloop Subscription Management System** is proprietary software.  
+© 2026 Brightloop Software. All rights reserved.
+
+---
+
+<div align="center">
+  <strong>Built with ❤️ by Brightloop Software</strong>
+</div>
