@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
     padding: 40,
     fontSize: 10,
     fontFamily: 'Helvetica',
-    color: '#1e293b',
+    color: '#0F1E2E',
     backgroundColor: '#ffffff',
   },
   header: {
@@ -15,17 +15,17 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginBottom: 30,
     borderBottomWidth: 1,
-    borderBottomColor: '#e2e8f0',
+    borderBottomColor: '#DDE5EA',
     paddingBottom: 20,
   },
   logoText: {
     fontSize: 22,
     fontWeight: 'bold',
-    color: '#2563eb',
+    color: '#0E7C7B',
   },
   logoSub: {
     fontSize: 9,
-    color: '#64748b',
+    color: '#5B6B7A',
     marginTop: 3,
   },
   invoiceMeta: {
@@ -34,11 +34,11 @@ const styles = StyleSheet.create({
   invoiceTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#0f172a',
+    color: '#0F1E2E',
   },
   invoiceNumber: {
     fontSize: 10,
-    color: '#64748b',
+    color: '#5B6B7A',
     marginTop: 2,
   },
   addressSection: {
@@ -52,19 +52,19 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 8,
     fontWeight: 'bold',
-    color: '#94a3b8',
+    color: '#5B6B7A',
     textTransform: 'uppercase',
     marginBottom: 6,
   },
   partyName: {
     fontSize: 12,
     fontWeight: 'bold',
-    color: '#0f172a',
+    color: '#0F1E2E',
     marginBottom: 2,
   },
   partyText: {
     fontSize: 9,
-    color: '#475569',
+    color: '#5B6B7A',
     lineHeight: 1.4,
   },
   table: {
@@ -73,18 +73,18 @@ const styles = StyleSheet.create({
   },
   tableHeader: {
     flexDirection: 'row',
-    backgroundColor: '#f8fafc',
+    backgroundColor: '#F4F7F8',
     borderBottomWidth: 1,
-    borderBottomColor: '#cbd5e1',
+    borderBottomColor: '#DDE5EA',
     paddingVertical: 8,
     paddingHorizontal: 6,
     fontWeight: 'bold',
-    color: '#475569',
+    color: '#5B6B7A',
   },
   tableRow: {
     flexDirection: 'row',
     borderBottomWidth: 1,
-    borderBottomColor: '#f1f5f9',
+    borderBottomColor: '#DDE5EA',
     paddingVertical: 8,
     paddingHorizontal: 6,
   },
@@ -106,10 +106,10 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
   },
   totalsLabel: {
-    color: '#64748b',
+    color: '#5B6B7A',
   },
   totalsValue: {
-    color: '#0f172a',
+    color: '#0F1E2E',
     fontWeight: 'bold',
   },
   grandTotalRow: {
@@ -118,17 +118,17 @@ const styles = StyleSheet.create({
     paddingTop: 8,
     marginTop: 4,
     borderTopWidth: 1,
-    borderTopColor: '#e2e8f0',
+    borderTopColor: '#DDE5EA',
   },
   grandTotalLabel: {
     fontSize: 12,
     fontWeight: 'bold',
-    color: '#0f172a',
+    color: '#0F1E2E',
   },
   grandTotalValue: {
     fontSize: 14,
     fontWeight: 'bold',
-    color: '#2563eb',
+    color: '#0E7C7B',
   },
   statusBadge: {
     marginTop: 10,
@@ -147,10 +147,10 @@ const styles = StyleSheet.create({
     right: 40,
     textAlign: 'center',
     borderTopWidth: 1,
-    borderTopColor: '#f1f5f9',
+    borderTopColor: '#DDE5EA',
     paddingTop: 15,
     fontSize: 8,
-    color: '#94a3b8',
+    color: '#5B6B7A',
   },
 });
 
@@ -202,10 +202,10 @@ export function InvoiceDocument({ invoice }: { invoice: InvoicePDFData }) {
           <View style={styles.invoiceMeta}>
             <Text style={styles.invoiceTitle}>INVOICE</Text>
             <Text style={styles.invoiceNumber}>{invoice.number}</Text>
-            <Text style={{ fontSize: 9, color: '#64748b', marginTop: 4 }}>
+            <Text style={{ fontSize: 9, color: '#5B6B7A', marginTop: 4 }}>
               Date: {format(new Date(invoice.invoiceDate), 'MMM dd, yyyy')}
             </Text>
-            <Text style={{ fontSize: 9, color: '#64748b' }}>
+            <Text style={{ fontSize: 9, color: '#5B6B7A' }}>
               Due: {format(new Date(invoice.dueDate), 'MMM dd, yyyy')}
             </Text>
           </View>
@@ -265,7 +265,7 @@ export function InvoiceDocument({ invoice }: { invoice: InvoicePDFData }) {
             {invoice.discountCents > 0 && (
               <View style={styles.totalsRow}>
                 <Text style={styles.totalsLabel}>Discounts:</Text>
-                <Text style={[styles.totalsValue, { color: '#16a34a' }]}>
+                <Text style={[styles.totalsValue, { color: '#2E7D4F' }]}>
                   -{formatCents(invoice.discountCents)}
                 </Text>
               </View>
@@ -284,7 +284,7 @@ export function InvoiceDocument({ invoice }: { invoice: InvoicePDFData }) {
             {invoice.paidCents > 0 && (
               <View style={styles.totalsRow}>
                 <Text style={styles.totalsLabel}>Amount Paid:</Text>
-                <Text style={[styles.totalsValue, { color: '#16a34a' }]}>
+                <Text style={[styles.totalsValue, { color: '#2E7D4F' }]}>
                   -{formatCents(invoice.paidCents)}
                 </Text>
               </View>
@@ -292,7 +292,7 @@ export function InvoiceDocument({ invoice }: { invoice: InvoicePDFData }) {
 
             <View style={[styles.totalsRow, { marginTop: 4 }]}>
               <Text style={styles.totalsLabel}>Balance Due:</Text>
-              <Text style={[styles.totalsValue, { fontSize: 11, color: isPaid ? '#16a34a' : '#ef4444' }]}>
+              <Text style={[styles.totalsValue, { fontSize: 11, color: isPaid ? '#2E7D4F' : '#C8372D' }]}>
                 {formatCents(remaining)}
               </Text>
             </View>
@@ -301,8 +301,8 @@ export function InvoiceDocument({ invoice }: { invoice: InvoicePDFData }) {
               style={[
                 styles.statusBadge,
                 {
-                  backgroundColor: isPaid ? '#dcfce7' : '#fee2e2',
-                  color: isPaid ? '#15803d' : '#b91c1c',
+                  backgroundColor: isPaid ? 'rgba(46, 125, 79, 0.12)' : 'rgba(200, 55, 45, 0.12)',
+                  color: isPaid ? '#2E7D4F' : '#C8372D',
                 },
               ]}
             >

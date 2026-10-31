@@ -236,7 +236,7 @@ export default function SubscriptionsPage() {
   const getStatusBadge = (status: string) => {
     const s = status.toUpperCase();
     if (s === 'ACTIVE') return 'badge badge-success';
-    if (s === 'CONFIRMED' || s === 'QUOTATION') return 'badge badge-info';
+    if (s === 'CONFIRMED' || s === 'QUOTATION') return 'badge badge-accent';
     if (s === 'PAUSED') return 'badge badge-warning';
     if (s === 'CLOSED') return 'badge badge-danger';
     return 'badge badge-neutral';
@@ -248,10 +248,10 @@ export default function SubscriptionsPage() {
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-white">
+            <h1 className="text-2xl font-bold tracking-tight text-ink">
               Subscriptions
             </h1>
-            <p className="text-sm text-slate-400 mt-1">
+            <p className="text-sm text-muted mt-1">
               Manage client subscription lifecycles, plans, contracts, and state transitions.
             </p>
           </div>
@@ -266,16 +266,16 @@ export default function SubscriptionsPage() {
         </div>
 
         {message && (
-          <div className="p-3.5 rounded-xl bg-blue-500/10 border border-blue-500/30 text-blue-300 text-sm flex items-center justify-between">
+          <div className="p-3.5 rounded-xl bg-primary/10 border border-primary/30 text-primary text-sm flex items-center justify-between">
             <span>{message}</span>
-            <button onClick={() => setMessage('')} className="text-xs text-blue-400 hover:text-white">
+            <button onClick={() => setMessage('')} className="text-xs text-primary hover:text-ink">
               ✕
             </button>
           </div>
         )}
 
         {/* Filter Bar */}
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 p-4 rounded-xl bg-slate-900/60 border border-slate-800">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 p-4 rounded-xl bg-surface/60 border border-border">
           <div className="flex flex-wrap items-center gap-1.5">
             {['ALL', 'DRAFT', 'QUOTATION', 'CONFIRMED', 'ACTIVE', 'PAUSED', 'CLOSED'].map((st) => (
               <button
@@ -283,8 +283,8 @@ export default function SubscriptionsPage() {
                 onClick={() => setStatusFilter(st)}
                 className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
                   statusFilter === st
-                    ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20'
-                    : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                    ? 'bg-primary text-ink shadow-md shadow-blue-500/20'
+                    : 'text-muted hover:text-ink hover:bg-surface'
                 }`}
               >
                 {st}
@@ -304,7 +304,7 @@ export default function SubscriptionsPage() {
         </div>
 
         {/* Table */}
-        <div className="card border-slate-800 overflow-hidden">
+        <div className="card border-border overflow-hidden">
           <div className="overflow-x-auto">
             <table className="table w-full">
               <thead>
@@ -322,13 +322,13 @@ export default function SubscriptionsPage() {
               <tbody>
                 {loading ? (
                   <tr>
-                    <td colSpan={8} className="text-center py-12 text-slate-500 text-xs">
+                    <td colSpan={8} className="text-center py-12 text-muted text-xs">
                       Loading subscriptions...
                     </td>
                   </tr>
                 ) : filteredSubscriptions.length === 0 ? (
                   <tr>
-                    <td colSpan={8} className="text-center py-12 text-slate-500 text-xs">
+                    <td colSpan={8} className="text-center py-12 text-muted text-xs">
                       No subscriptions found matching the filter.
                     </td>
                   </tr>
@@ -338,25 +338,25 @@ export default function SubscriptionsPage() {
 
                     return (
                       <tr key={sub.id}>
-                        <td className="font-mono text-xs font-bold text-blue-400">
+                        <td className="font-mono text-xs font-bold text-primary">
                           {sub.number}
                         </td>
                         <td className="text-xs">
-                          <div className="font-semibold text-white">
+                          <div className="font-semibold text-ink">
                             {sub.customer.company || `${sub.customer.firstName} ${sub.customer.lastName}`}
                           </div>
-                          <div className="text-slate-400 text-[11px]">{sub.customer.email}</div>
+                          <div className="text-muted text-[11px]">{sub.customer.email}</div>
                         </td>
                         <td className="text-xs">
-                          <div className="font-medium text-slate-200">{sub.plan.name}</div>
-                          <div className="text-slate-400 text-[11px] uppercase tracking-wider">
+                          <div className="font-medium text-ink">{sub.plan.name}</div>
+                          <div className="text-muted text-[11px] uppercase tracking-wider">
                             {sub.plan.billingPeriod}
                           </div>
                         </td>
-                        <td className="text-xs text-slate-400">
+                        <td className="text-xs text-muted">
                           {new Date(sub.startDate).toLocaleDateString()}
                         </td>
-                        <td className="text-xs text-slate-300">
+                        <td className="text-xs text-ink">
                           {sub.nextBillingDate ? new Date(sub.nextBillingDate).toLocaleDateString() : '—'}
                         </td>
                         <td>
@@ -364,7 +364,7 @@ export default function SubscriptionsPage() {
                             {sub.status}
                           </span>
                         </td>
-                        <td className="text-xs font-semibold text-white">
+                        <td className="text-xs font-semibold text-ink">
                           {formatMoney(lineTotal)}
                         </td>
                         <td className="text-right">
@@ -372,7 +372,7 @@ export default function SubscriptionsPage() {
                             {sub.status === 'DRAFT' && (
                               <button
                                 onClick={() => handleTransition(sub.id, 'submit_quotation')}
-                                className="px-2 py-1 rounded text-[11px] font-semibold bg-blue-600/20 text-blue-300 hover:bg-blue-600/30 border border-blue-500/30"
+                                className="px-2 py-1 rounded text-[11px] font-semibold bg-primary/20 text-primary hover:bg-primary/30 border border-primary/30"
                               >
                                 Send Quote
                               </button>
@@ -381,7 +381,7 @@ export default function SubscriptionsPage() {
                             {sub.status === 'QUOTATION' && (
                               <button
                                 onClick={() => handleTransition(sub.id, 'confirm')}
-                                className="px-2 py-1 rounded text-[11px] font-semibold bg-indigo-600/20 text-indigo-300 hover:bg-indigo-600/30 border border-indigo-500/30"
+                                className="px-2 py-1 rounded text-[11px] font-semibold bg-primary/20 text-primary hover:bg-primary/30 border border-primary/30"
                               >
                                 Confirm
                               </button>
@@ -390,7 +390,7 @@ export default function SubscriptionsPage() {
                             {sub.status === 'CONFIRMED' && (
                               <button
                                 onClick={() => handleTransition(sub.id, 'activate')}
-                                className="px-2 py-1 rounded text-[11px] font-semibold bg-emerald-600/20 text-emerald-300 hover:bg-emerald-600/30 border border-emerald-500/30"
+                                className="px-2 py-1 rounded text-[11px] font-semibold bg-success text-success-ink/20 text-success hover:bg-success text-success-ink/30 border border-success/30"
                               >
                                 Activate
                               </button>
@@ -401,7 +401,7 @@ export default function SubscriptionsPage() {
                                 {sub.plan.pausable && (
                                   <button
                                     onClick={() => handleTransition(sub.id, 'pause')}
-                                    className="px-2 py-1 rounded text-[11px] font-semibold bg-amber-600/20 text-amber-300 hover:bg-amber-600/30 border border-amber-500/30"
+                                    className="px-2 py-1 rounded text-[11px] font-semibold bg-warning text-warning-ink/20 text-warning hover:bg-warning text-warning-ink/30 border border-warning/30"
                                   >
                                     Pause
                                   </button>
@@ -409,7 +409,7 @@ export default function SubscriptionsPage() {
                                 {sub.plan.closableEarly && (
                                   <button
                                     onClick={() => handleTransition(sub.id, 'close')}
-                                    className="px-2 py-1 rounded text-[11px] font-semibold bg-red-600/20 text-red-300 hover:bg-red-600/30 border border-red-500/30"
+                                    className="px-2 py-1 rounded text-[11px] font-semibold bg-danger text-danger-ink/20 text-danger hover:bg-danger text-danger-ink/30 border border-danger/30"
                                   >
                                     Close
                                   </button>
@@ -420,14 +420,14 @@ export default function SubscriptionsPage() {
                             {sub.status === 'PAUSED' && (
                               <button
                                 onClick={() => handleTransition(sub.id, 'resume')}
-                                className="px-2 py-1 rounded text-[11px] font-semibold bg-emerald-600/20 text-emerald-300 hover:bg-emerald-600/30 border border-emerald-500/30"
+                                className="px-2 py-1 rounded text-[11px] font-semibold bg-success text-success-ink/20 text-success hover:bg-success text-success-ink/30 border border-success/30"
                               >
                                 Resume
                               </button>
                             )}
 
                             {sub.status === 'CLOSED' && (
-                              <span className="text-[11px] text-slate-500 italic">Archived</span>
+                              <span className="text-[11px] text-muted italic">Archived</span>
                             )}
                           </div>
                         </td>
@@ -442,13 +442,13 @@ export default function SubscriptionsPage() {
 
         {/* Modal: New Subscription */}
         {isModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-            <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6 shadow-2xl space-y-6">
-              <div className="flex items-center justify-between pb-4 border-b border-slate-800">
-                <h3 className="text-lg font-bold text-white">Create New Subscription</h3>
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/50 backdrop-blur-sm">
+            <div className="bg-surface border border-border rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6 shadow-2xl space-y-6">
+              <div className="flex items-center justify-between pb-4 border-b border-border">
+                <h3 className="text-lg font-bold text-ink">Create New Subscription</h3>
                 <button
                   onClick={() => setIsModalOpen(false)}
-                  className="text-slate-400 hover:text-white text-lg"
+                  className="text-muted hover:text-ink text-lg"
                 >
                   ✕
                 </button>
@@ -457,7 +457,7 @@ export default function SubscriptionsPage() {
               <form onSubmit={handleCreateSubscription} className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1.5 uppercase tracking-wider">
+                    <label className="block text-xs font-semibold text-ink mb-1.5 uppercase tracking-wider">
                       Customer
                     </label>
                     <select
@@ -475,7 +475,7 @@ export default function SubscriptionsPage() {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1.5 uppercase tracking-wider">
+                    <label className="block text-xs font-semibold text-ink mb-1.5 uppercase tracking-wider">
                       Subscription Plan
                     </label>
                     <select
@@ -495,7 +495,7 @@ export default function SubscriptionsPage() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1.5 uppercase tracking-wider">
+                    <label className="block text-xs font-semibold text-ink mb-1.5 uppercase tracking-wider">
                       Start Date
                     </label>
                     <input
@@ -508,7 +508,7 @@ export default function SubscriptionsPage() {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1.5 uppercase tracking-wider">
+                    <label className="block text-xs font-semibold text-ink mb-1.5 uppercase tracking-wider">
                       Payment Terms (Days)
                     </label>
                     <input
@@ -526,13 +526,13 @@ export default function SubscriptionsPage() {
                 {/* Line Items */}
                 <div className="pt-2">
                   <div className="flex items-center justify-between mb-2">
-                    <label className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
+                    <label className="text-xs font-semibold text-ink uppercase tracking-wider">
                       Subscription Line Items
                     </label>
                     <button
                       type="button"
                       onClick={handleAddLine}
-                      className="text-xs font-semibold text-blue-400 hover:text-blue-300"
+                      className="text-xs font-semibold text-primary hover:text-primary"
                     >
                       + Add Item
                     </button>
@@ -545,7 +545,7 @@ export default function SubscriptionsPage() {
                       return (
                         <div
                           key={idx}
-                          className="p-3 rounded-xl bg-slate-950/70 border border-slate-800 flex items-center gap-3"
+                          className="p-3 rounded-xl bg-bg/70 border border-border flex items-center gap-3"
                         >
                           <div className="flex-1">
                             <select
@@ -622,7 +622,7 @@ export default function SubscriptionsPage() {
                             />
                           </div>
 
-                          <div className="w-24 text-right text-xs font-semibold text-white">
+                          <div className="w-24 text-right text-xs font-semibold text-ink">
                             {formatMoney(line.quantity * line.unitPriceCents)}
                           </div>
 
@@ -630,7 +630,7 @@ export default function SubscriptionsPage() {
                             <button
                               type="button"
                               onClick={() => handleRemoveLine(idx)}
-                              className="text-red-400 hover:text-red-300 text-xs px-1"
+                              className="text-danger hover:text-danger text-xs px-1"
                             >
                               ✕
                             </button>
@@ -641,7 +641,7 @@ export default function SubscriptionsPage() {
                   </div>
                 </div>
 
-                <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-800">
+                <div className="flex items-center justify-end gap-3 pt-4 border-t border-border">
                   <button
                     type="button"
                     onClick={() => setIsModalOpen(false)}

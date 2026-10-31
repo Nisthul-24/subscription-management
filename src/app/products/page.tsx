@@ -137,10 +137,10 @@ export default function ProductsPage() {
       <div className="space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-white">
+            <h1 className="text-2xl font-bold tracking-tight text-ink">
               Products & Variants
             </h1>
-            <p className="text-sm text-slate-400 mt-1">
+            <p className="text-sm text-muted mt-1">
               Catalog of base products, add-ons, software tiers, and variant attributes with extra pricing.
             </p>
           </div>
@@ -156,52 +156,52 @@ export default function ProductsPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {loading ? (
-            <div className="col-span-full py-16 text-center text-slate-500 text-xs">
+            <div className="col-span-full py-16 text-center text-muted text-xs">
               Loading product catalog...
             </div>
           ) : products.length === 0 ? (
-            <div className="col-span-full py-16 text-center text-slate-500 text-xs">
+            <div className="col-span-full py-16 text-center text-muted text-xs">
               No products found.
             </div>
           ) : (
             products.map((p) => (
-              <div key={p.id} className="card p-6 border-slate-800 space-y-4 flex flex-col justify-between">
+              <div key={p.id} className="card p-6 border-border space-y-4 flex flex-col justify-between">
                 <div>
                   <div className="flex items-start justify-between gap-2 mb-1">
-                    <h3 className="text-base font-bold text-white">{p.name}</h3>
+                    <h3 className="text-base font-bold text-ink">{p.name}</h3>
                     <span className="badge badge-neutral uppercase text-[10px]">{p.type}</span>
                   </div>
 
-                  <div className="text-2xl font-extrabold text-blue-400 mb-2">
+                  <div className="text-2xl font-extrabold text-primary mb-2">
                     {formatMoney(p.salesPriceCents)}
-                    <span className="text-xs font-normal text-slate-400 ml-1">base price</span>
+                    <span className="text-xs font-normal text-muted ml-1">base price</span>
                   </div>
 
-                  {p.notes && <p className="text-xs text-slate-400 leading-relaxed mb-4">{p.notes}</p>}
+                  {p.notes && <p className="text-xs text-muted leading-relaxed mb-4">{p.notes}</p>}
 
                   {/* Attributes & Variants */}
-                  <div className="pt-3 border-t border-slate-800/80 space-y-2">
-                    <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider flex items-center justify-between">
+                  <div className="pt-3 border-t border-border/80 space-y-2">
+                    <div className="text-[11px] font-semibold text-muted uppercase tracking-wider flex items-center justify-between">
                       <span>Configured Variants</span>
                       <button
                         onClick={() => setSelectedProductId(p.id)}
-                        className="text-blue-400 hover:text-blue-300 font-bold"
+                        className="text-primary hover:text-primary font-bold"
                       >
                         + Add Variant
                       </button>
                     </div>
 
                     {p.attributes.length === 0 ? (
-                      <p className="text-xs text-slate-500 italic">No variants (standard item)</p>
+                      <p className="text-xs text-muted italic">No variants (standard item)</p>
                     ) : (
                       p.attributes.map((attr) => (
-                        <div key={attr.id} className="p-2.5 rounded-lg bg-slate-950/70 border border-slate-800/80">
-                          <div className="text-xs font-semibold text-slate-300 mb-1">{attr.name}:</div>
+                        <div key={attr.id} className="p-2.5 rounded-lg bg-bg/70 border border-border/80">
+                          <div className="text-xs font-semibold text-ink mb-1">{attr.name}:</div>
                           <div className="flex flex-wrap gap-1.5">
                             {attr.variants.map((v) => (
                               <span
                                 key={v.id}
-                                className="px-2 py-0.5 rounded text-[11px] bg-slate-800 text-slate-200 border border-slate-700"
+                                className="px-2 py-0.5 rounded text-[11px] bg-surface text-ink border border-border"
                               >
                                 {v.value} {v.extraPriceCents > 0 && `(+${formatMoney(v.extraPriceCents)})`}
                               </span>
@@ -219,16 +219,16 @@ export default function ProductsPage() {
 
         {/* Modal: New Product */}
         {isProductModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-            <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md p-6 shadow-2xl space-y-4">
-              <div className="flex justify-between items-center pb-3 border-b border-slate-800">
-                <h3 className="text-base font-bold text-white">Create Product</h3>
-                <button onClick={() => setIsProductModalOpen(false)} className="text-slate-400 hover:text-white">✕</button>
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/50 backdrop-blur-sm">
+            <div className="bg-surface border border-border rounded-2xl w-full max-w-md p-6 shadow-2xl space-y-4">
+              <div className="flex justify-between items-center pb-3 border-b border-border">
+                <h3 className="text-base font-bold text-ink">Create Product</h3>
+                <button onClick={() => setIsProductModalOpen(false)} className="text-muted hover:text-ink">✕</button>
               </div>
 
               <form onSubmit={handleCreateProduct} className="space-y-4">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">Product Name</label>
+                  <label className="block text-xs font-semibold text-ink mb-1">Product Name</label>
                   <input
                     type="text"
                     required
@@ -241,7 +241,7 @@ export default function ProductsPage() {
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1">Type</label>
+                    <label className="block text-xs font-semibold text-ink mb-1">Type</label>
                     <select value={type} onChange={(e) => setType(e.target.value)} className="input w-full text-xs">
                       <option value="product">Product (Software)</option>
                       <option value="service">Service (Add-on)</option>
@@ -249,7 +249,7 @@ export default function ProductsPage() {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1">Sales Price ($)</label>
+                    <label className="block text-xs font-semibold text-ink mb-1">Sales Price ($)</label>
                     <input
                       type="number"
                       step="0.01"
@@ -264,7 +264,7 @@ export default function ProductsPage() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">Cost Price ($) (Optional)</label>
+                  <label className="block text-xs font-semibold text-ink mb-1">Cost Price ($) (Optional)</label>
                   <input
                     type="number"
                     step="0.01"
@@ -277,7 +277,7 @@ export default function ProductsPage() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">Notes / Description</label>
+                  <label className="block text-xs font-semibold text-ink mb-1">Notes / Description</label>
                   <textarea
                     value={notes}
                     onChange={(e) => setNotes(e.target.value)}
@@ -286,7 +286,7 @@ export default function ProductsPage() {
                   />
                 </div>
 
-                <div className="flex justify-end gap-3 pt-3 border-t border-slate-800">
+                <div className="flex justify-end gap-3 pt-3 border-t border-border">
                   <button type="button" onClick={() => setIsProductModalOpen(false)} className="btn btn-secondary text-xs">Cancel</button>
                   <button type="submit" disabled={submitting} className="btn btn-primary text-xs font-medium">
                     {submitting ? 'Saving...' : 'Save Product'}
@@ -299,16 +299,16 @@ export default function ProductsPage() {
 
         {/* Modal: Add Variant */}
         {selectedProductId && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-            <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-sm p-6 shadow-2xl space-y-4">
-              <div className="flex justify-between items-center pb-3 border-b border-slate-800">
-                <h3 className="text-base font-bold text-white">Add Variant</h3>
-                <button onClick={() => setSelectedProductId(null)} className="text-slate-400 hover:text-white">✕</button>
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/50 backdrop-blur-sm">
+            <div className="bg-surface border border-border rounded-2xl w-full max-w-sm p-6 shadow-2xl space-y-4">
+              <div className="flex justify-between items-center pb-3 border-b border-border">
+                <h3 className="text-base font-bold text-ink">Add Variant</h3>
+                <button onClick={() => setSelectedProductId(null)} className="text-muted hover:text-ink">✕</button>
               </div>
 
               <form onSubmit={handleAddVariant} className="space-y-4">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">Attribute Name</label>
+                  <label className="block text-xs font-semibold text-ink mb-1">Attribute Name</label>
                   <input
                     type="text"
                     required
@@ -320,7 +320,7 @@ export default function ProductsPage() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">Variant Value</label>
+                  <label className="block text-xs font-semibold text-ink mb-1">Variant Value</label>
                   <input
                     type="text"
                     required
@@ -332,7 +332,7 @@ export default function ProductsPage() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">Extra Price ($)</label>
+                  <label className="block text-xs font-semibold text-ink mb-1">Extra Price ($)</label>
                   <input
                     type="number"
                     step="0.01"
@@ -345,7 +345,7 @@ export default function ProductsPage() {
                   />
                 </div>
 
-                <div className="flex justify-end gap-3 pt-3 border-t border-slate-800">
+                <div className="flex justify-end gap-3 pt-3 border-t border-border">
                   <button type="button" onClick={() => setSelectedProductId(null)} className="btn btn-secondary text-xs">Cancel</button>
                   <button type="submit" className="btn btn-primary text-xs font-medium">Add to Product</button>
                 </div>

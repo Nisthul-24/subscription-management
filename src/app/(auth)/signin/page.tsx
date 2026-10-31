@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { SparklesIcon, LightningIcon } from '@/components/ui/Icons';
+import ThemeToggle from '@/components/ui/ThemeToggle';
 
 export default function SignInPage() {
   const router = useRouter();
@@ -50,37 +51,35 @@ export default function SignInPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-center items-center p-4 relative selection:bg-blue-600 selection:text-white overflow-hidden">
-      {/* Background ambient lighting */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden -z-10">
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-tr from-blue-600/20 via-indigo-600/15 to-purple-600/10 rounded-full blur-3xl" />
-        <div className="absolute inset-0 bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:24px_24px] opacity-25" />
+    <div className="min-h-screen bg-bg text-ink flex flex-col justify-center items-center p-4 relative overflow-hidden">
+      <div className="absolute top-4 right-4">
+        <ThemeToggle />
       </div>
 
       <div className="w-full max-w-md">
         {/* Card */}
-        <div className="p-8 rounded-3xl bg-slate-900/80 backdrop-blur-2xl border border-slate-800/90 shadow-2xl shadow-black/80">
+        <div className="p-8 rounded-3xl bg-surface border border-border shadow-md">
           {/* Brand Header */}
           <div className="text-center mb-8">
-            <Link href="/" className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-violet-500 shadow-xl shadow-blue-500/30 mb-4 text-2xl font-black text-white hover:scale-105 transition-transform">
+            <Link href="/" className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-primary text-primary-ink shadow-sm mb-4 text-2xl font-black group-hover:opacity-90 transition-opacity">
               B
             </Link>
-            <h1 className="text-2xl font-bold tracking-tight text-white mb-1.5">
+            <h1 className="text-2xl font-bold tracking-tight text-ink mb-1.5">
               Welcome to Brightloop
             </h1>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-muted">
               Enterprise Subscription & Recurring Revenue Engine
             </p>
           </div>
 
           {/* Quick 1-Click Demo Logins */}
-          <div className="mb-6 p-3.5 rounded-2xl bg-slate-950/70 border border-slate-800/80">
+          <div className="mb-6 p-3.5 rounded-2xl bg-bg border border-border">
             <div className="flex items-center justify-between mb-2.5">
-              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
-                <SparklesIcon size={13} className="text-amber-400" />
+              <span className="text-[11px] font-bold uppercase tracking-wider text-muted flex items-center gap-1.5">
+                <SparklesIcon size={13} className="text-accent" />
                 Quick Demo Auto-Fill
               </span>
-              <span className="text-[10px] text-slate-500">Pick role</span>
+              <span className="text-[10px] text-muted">Pick role</span>
             </div>
             <div className="grid grid-cols-3 gap-2">
               <button
@@ -88,8 +87,8 @@ export default function SignInPage() {
                 onClick={() => fillDemo('admin', 'admin@brightloop.dev', 'Admin@123!')}
                 className={`px-2.5 py-2 text-xs font-semibold rounded-xl transition-all border ${
                   activeDemo === 'admin'
-                    ? 'bg-blue-600 text-white border-blue-500 shadow-md shadow-blue-500/25'
-                    : 'bg-blue-500/10 text-blue-300 border-blue-500/20 hover:bg-blue-500/20'
+                    ? 'bg-accent text-accent-ink border-accent font-bold shadow-sm'
+                    : 'role-pill-admin'
                 }`}
               >
                 Admin
@@ -99,8 +98,8 @@ export default function SignInPage() {
                 onClick={() => fillDemo('staff', 'staff@brightloop.dev', 'Staff@123!')}
                 className={`px-2.5 py-2 text-xs font-semibold rounded-xl transition-all border ${
                   activeDemo === 'staff'
-                    ? 'bg-emerald-600 text-white border-emerald-500 shadow-md shadow-emerald-500/25'
-                    : 'bg-emerald-500/10 text-emerald-300 border-emerald-500/20 hover:bg-emerald-500/20'
+                    ? 'bg-primary text-primary-ink border-primary font-bold shadow-sm'
+                    : 'role-pill-staff'
                 }`}
               >
                 Staff
@@ -110,8 +109,8 @@ export default function SignInPage() {
                 onClick={() => fillDemo('customer', 'customer@brightloop.dev', 'Customer@123!')}
                 className={`px-2.5 py-2 text-xs font-semibold rounded-xl transition-all border ${
                   activeDemo === 'customer'
-                    ? 'bg-purple-600 text-white border-purple-500 shadow-md shadow-purple-500/25'
-                    : 'bg-purple-500/10 text-purple-300 border-purple-500/20 hover:bg-purple-500/20'
+                    ? 'bg-success text-success-ink border-success font-bold shadow-sm'
+                    : 'role-pill-customer'
                 }`}
               >
                 Customer
@@ -120,8 +119,8 @@ export default function SignInPage() {
           </div>
 
           {error && (
-            <div className="mb-5 p-3.5 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs flex items-center gap-2.5 animate-shake">
-              <svg className="w-4 h-4 shrink-0 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div className="mb-5 p-3.5 rounded-xl bg-danger/10 border border-danger/30 text-danger text-xs flex items-center gap-2.5">
+              <svg className="w-4 h-4 shrink-0 text-danger" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
               </svg>
               <span>{error}</span>
@@ -130,7 +129,7 @@ export default function SignInPage() {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-[11px] font-bold text-slate-300 mb-1.5 uppercase tracking-wider">
+              <label className="block text-[11px] font-bold text-muted mb-1.5 uppercase tracking-wider">
                 Email Address
               </label>
               <input
@@ -139,18 +138,18 @@ export default function SignInPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="name@brightloop.dev"
-                className="w-full px-4 py-2.5 rounded-xl bg-slate-950/80 border border-slate-800 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all"
+                className="input w-full"
               />
             </div>
 
             <div>
               <div className="flex items-center justify-between mb-1.5">
-                <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wider">
+                <label className="text-[11px] font-bold text-muted uppercase tracking-wider">
                   Password
                 </label>
                 <Link
                   href="/forgot-password"
-                  className="text-xs font-medium text-blue-400 hover:text-blue-300 transition-colors"
+                  className="text-xs font-medium text-primary hover:underline transition-colors"
                 >
                   Forgot password?
                 </Link>
@@ -162,12 +161,12 @@ export default function SignInPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••••••"
-                  className="w-full px-4 py-2.5 pr-11 rounded-xl bg-slate-950/80 border border-slate-800 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all"
+                  className="input w-full pr-14"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 text-xs px-1"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-ink text-xs px-1"
                 >
                   {showPassword ? 'Hide' : 'Show'}
                 </button>
@@ -177,11 +176,11 @@ export default function SignInPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 mt-3 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold text-sm shadow-xl shadow-blue-500/25 flex items-center justify-center gap-2 transition-all disabled:opacity-50"
+              className="btn btn-primary w-full py-3 mt-3 flex items-center justify-center gap-2"
             >
               {loading ? (
                 <>
-                  <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  <span className="w-4 h-4 border-2 border-primary-ink/30 border-t-primary-ink rounded-full animate-spin" />
                   <span>Authenticating...</span>
                 </>
               ) : (
@@ -193,9 +192,9 @@ export default function SignInPage() {
             </button>
           </form>
 
-          <div className="mt-6 text-center text-xs text-slate-400">
+          <div className="mt-6 text-center text-xs text-muted">
             Don&apos;t have an account yet?{' '}
-            <Link href="/signup" className="text-blue-400 font-semibold hover:text-blue-300 transition-colors">
+            <Link href="/signup" className="text-primary font-semibold hover:underline transition-colors">
               Create an account
             </Link>
           </div>

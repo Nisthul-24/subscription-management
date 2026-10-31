@@ -75,10 +75,10 @@ export default function TaxRulesPage() {
       <div className="space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-white">
+            <h1 className="text-2xl font-bold tracking-tight text-ink">
               Tax Rules
             </h1>
-            <p className="text-sm text-slate-400 mt-1">
+            <p className="text-sm text-muted mt-1">
               Configured tax rates in basis points, applied to lines post-discount with half-up rounding.
             </p>
           </div>
@@ -92,7 +92,7 @@ export default function TaxRulesPage() {
           </button>
         </div>
 
-        <div className="card border-slate-800 overflow-hidden">
+        <div className="card border-border overflow-hidden">
           <div className="overflow-x-auto">
             <table className="table w-full">
               <thead>
@@ -107,24 +107,24 @@ export default function TaxRulesPage() {
               <tbody>
                 {loading ? (
                   <tr>
-                    <td colSpan={5} className="text-center py-12 text-slate-500 text-xs">
+                    <td colSpan={5} className="text-center py-12 text-muted text-xs">
                       Loading tax rules...
                     </td>
                   </tr>
                 ) : taxRules.length === 0 ? (
                   <tr>
-                    <td colSpan={5} className="text-center py-12 text-slate-500 text-xs">
+                    <td colSpan={5} className="text-center py-12 text-muted text-xs">
                       No tax rules defined yet.
                     </td>
                   </tr>
                 ) : (
                   taxRules.map((tr) => (
                     <tr key={tr.id}>
-                      <td className="text-xs font-semibold text-white">{tr.name}</td>
-                      <td className="text-xs font-bold text-blue-400">
+                      <td className="text-xs font-semibold text-ink">{tr.name}</td>
+                      <td className="text-xs font-bold text-primary">
                         {(tr.rateBps / 100).toFixed(2)}%
                       </td>
-                      <td className="text-xs font-mono text-slate-400">{tr.rateBps} bps</td>
+                      <td className="text-xs font-mono text-muted">{tr.rateBps} bps</td>
                       <td>
                         <span className="badge badge-neutral uppercase text-[10px]">
                           {tr.applicability}
@@ -145,16 +145,16 @@ export default function TaxRulesPage() {
 
         {/* Modal */}
         {isModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-            <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-sm p-6 shadow-2xl space-y-4">
-              <div className="flex justify-between items-center pb-3 border-b border-slate-800">
-                <h3 className="text-base font-bold text-white">Create Tax Rule</h3>
-                <button onClick={() => setIsModalOpen(false)} className="text-slate-400 hover:text-white">✕</button>
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/50 backdrop-blur-sm">
+            <div className="bg-surface border border-border rounded-2xl w-full max-w-sm p-6 shadow-2xl space-y-4">
+              <div className="flex justify-between items-center pb-3 border-b border-border">
+                <h3 className="text-base font-bold text-ink">Create Tax Rule</h3>
+                <button onClick={() => setIsModalOpen(false)} className="text-muted hover:text-ink">✕</button>
               </div>
 
               <form onSubmit={handleCreate} className="space-y-4">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">Rule Name</label>
+                  <label className="block text-xs font-semibold text-ink mb-1">Rule Name</label>
                   <input
                     type="text"
                     required
@@ -166,7 +166,7 @@ export default function TaxRulesPage() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">Rate Percentage (%)</label>
+                  <label className="block text-xs font-semibold text-ink mb-1">Rate Percentage (%)</label>
                   <input
                     type="number"
                     step="0.01"
@@ -178,13 +178,13 @@ export default function TaxRulesPage() {
                     placeholder="18"
                     className="input w-full text-xs"
                   />
-                  <span className="text-[11px] text-slate-500 mt-1 block">
+                  <span className="text-[11px] text-muted mt-1 block">
                     Saved internally as basis points ({Math.round(parseFloat(ratePercent || '0') * 100)} bps)
                   </span>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">Applicability Scope</label>
+                  <label className="block text-xs font-semibold text-ink mb-1">Applicability Scope</label>
                   <select
                     value={applicability}
                     onChange={(e) => setApplicability(e.target.value)}
@@ -196,7 +196,7 @@ export default function TaxRulesPage() {
                   </select>
                 </div>
 
-                <div className="flex justify-end gap-3 pt-3 border-t border-slate-800">
+                <div className="flex justify-end gap-3 pt-3 border-t border-border">
                   <button type="button" onClick={() => setIsModalOpen(false)} className="btn btn-secondary text-xs">Cancel</button>
                   <button type="submit" disabled={submitting} className="btn btn-primary text-xs font-medium">
                     {submitting ? 'Creating...' : 'Create Rule'}

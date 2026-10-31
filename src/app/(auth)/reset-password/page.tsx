@@ -3,6 +3,7 @@
 import React, { useState, Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
+import ThemeToggle from '@/components/ui/ThemeToggle';
 
 function ResetPasswordForm() {
   const searchParams = useSearchParams();
@@ -64,11 +65,11 @@ function ResetPasswordForm() {
   if (success) {
     return (
       <div className="text-center space-y-4">
-        <div className="w-12 h-12 mx-auto rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xl">
+        <div className="w-12 h-12 mx-auto rounded-full bg-success/20 text-success flex items-center justify-center text-xl">
           ✓
         </div>
-        <h2 className="text-xl font-bold text-white">Password Updated!</h2>
-        <p className="text-sm text-slate-300">
+        <h2 className="text-xl font-bold text-ink">Password Updated!</h2>
+        <p className="text-sm text-muted">
           Your password has been securely reset. You can now log into your account.
         </p>
         <div className="pt-2">
@@ -83,13 +84,13 @@ function ResetPasswordForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       {error && (
-        <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-sm">
+        <div className="p-3 rounded-xl bg-danger/10 border border-danger/30 text-danger text-sm">
           {error}
         </div>
       )}
 
       <div>
-        <label className="block text-xs font-semibold text-slate-300 mb-1.5 uppercase tracking-wider">
+        <label className="block text-xs font-semibold text-muted mb-1.5 uppercase tracking-wider">
           New Password
         </label>
         <input
@@ -101,21 +102,21 @@ function ResetPasswordForm() {
           className="input w-full"
         />
 
-        <div className="mt-3 p-3 rounded-lg bg-slate-900/60 border border-slate-800 text-xs space-y-1.5">
+        <div className="mt-3 p-3 rounded-lg bg-bg border border-border text-xs space-y-1.5">
           <div className="grid grid-cols-2 gap-x-2 gap-y-1">
-            <div className={`flex items-center gap-1.5 ${hasMinLength ? 'text-emerald-400' : 'text-slate-500'}`}>
+            <div className={`flex items-center gap-1.5 ${hasMinLength ? 'text-success' : 'text-muted'}`}>
               <span>{hasMinLength ? '✓' : '○'}</span>
               <span>≥ 9 characters</span>
             </div>
-            <div className={`flex items-center gap-1.5 ${hasUpper ? 'text-emerald-400' : 'text-slate-500'}`}>
+            <div className={`flex items-center gap-1.5 ${hasUpper ? 'text-success' : 'text-muted'}`}>
               <span>{hasUpper ? '✓' : '○'}</span>
               <span>1 uppercase</span>
             </div>
-            <div className={`flex items-center gap-1.5 ${hasLower ? 'text-emerald-400' : 'text-slate-500'}`}>
+            <div className={`flex items-center gap-1.5 ${hasLower ? 'text-success' : 'text-muted'}`}>
               <span>{hasLower ? '✓' : '○'}</span>
               <span>1 lowercase</span>
             </div>
-            <div className={`flex items-center gap-1.5 ${hasSpecial ? 'text-emerald-400' : 'text-slate-500'}`}>
+            <div className={`flex items-center gap-1.5 ${hasSpecial ? 'text-success' : 'text-muted'}`}>
               <span>{hasSpecial ? '✓' : '○'}</span>
               <span>1 special char</span>
             </div>
@@ -124,7 +125,7 @@ function ResetPasswordForm() {
       </div>
 
       <div>
-        <label className="block text-xs font-semibold text-slate-300 mb-1.5 uppercase tracking-wider">
+        <label className="block text-xs font-semibold text-muted mb-1.5 uppercase tracking-wider">
           Confirm New Password
         </label>
         <input
@@ -140,13 +141,13 @@ function ResetPasswordForm() {
       <button
         type="submit"
         disabled={loading || !isPasswordValid || password !== confirmPassword}
-        className="btn btn-primary w-full py-2.5 mt-2 flex items-center justify-center font-medium shadow-lg shadow-blue-500/20 disabled:opacity-50"
+        className="btn btn-primary w-full py-2.5 mt-2 flex items-center justify-center font-medium disabled:opacity-50"
       >
         {loading ? 'Updating password...' : 'Update Password'}
       </button>
 
       <div className="text-center pt-2">
-        <Link href="/signin" className="text-xs text-slate-400 hover:text-white transition-colors">
+        <Link href="/signin" className="text-xs text-muted hover:text-ink transition-colors">
           ← Cancel and Return to Sign In
         </Link>
       </div>
@@ -156,23 +157,29 @@ function ResetPasswordForm() {
 
 export default function ResetPasswordPage() {
   return (
-    <div className="auth-wrapper">
-      <div className="auth-card">
-        <div className="text-center mb-6">
-          <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 shadow-lg shadow-blue-500/25 mb-3 text-xl font-black text-white">
-            B
-          </div>
-          <h1 className="text-2xl font-bold tracking-tight text-white mb-1">
-            Choose New Password
-          </h1>
-          <p className="text-sm text-slate-400">
-            Create a strong, unique password for your Brightloop account.
-          </p>
-        </div>
+    <div className="min-h-screen bg-bg text-ink flex flex-col justify-center items-center p-4 relative overflow-hidden">
+      <div className="absolute top-4 right-4">
+        <ThemeToggle />
+      </div>
 
-        <Suspense fallback={<div className="text-center text-slate-400 py-8">Loading form...</div>}>
-          <ResetPasswordForm />
-        </Suspense>
+      <div className="w-full max-w-md">
+        <div className="p-8 rounded-3xl bg-surface border border-border shadow-md">
+          <div className="text-center mb-6">
+            <Link href="/" className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-primary text-primary-ink shadow-sm mb-3 text-xl font-black group-hover:opacity-90 transition-opacity">
+              B
+            </Link>
+            <h1 className="text-2xl font-bold tracking-tight text-ink mb-1">
+              Choose New Password
+            </h1>
+            <p className="text-sm text-muted">
+              Create a strong, unique password for your Brightloop account.
+            </p>
+          </div>
+
+          <Suspense fallback={<div className="text-center text-muted py-8">Loading form...</div>}>
+            <ResetPasswordForm />
+          </Suspense>
+        </div>
       </div>
     </div>
   );

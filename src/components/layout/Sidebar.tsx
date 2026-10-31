@@ -103,16 +103,16 @@ export default function Sidebar({ user, onSignOut, isOpen = false, onClose }: Si
 
   const initials = `${user.firstName?.[0] || 'U'}${user.lastName?.[0] || ''}`.toUpperCase();
 
-  const getRoleBadgeColor = (role: Role) => {
+  const getRoleBadgeClass = (role: Role) => {
     switch (role) {
       case 'ADMIN':
-        return 'bg-gradient-to-r from-amber-500/20 to-orange-500/20 text-amber-300 border-amber-500/30';
+        return 'role-pill-admin';
       case 'STAFF':
-        return 'bg-gradient-to-r from-blue-500/20 to-cyan-500/20 text-blue-300 border-blue-500/30';
+        return 'role-pill-staff';
       case 'CUSTOMER':
-        return 'bg-gradient-to-r from-emerald-500/20 to-teal-500/20 text-emerald-300 border-emerald-500/30';
+        return 'role-pill-customer';
       default:
-        return 'bg-slate-800 text-slate-300 border-slate-700';
+        return 'bg-bg text-muted border-border';
     }
   };
 
@@ -122,7 +122,7 @@ export default function Sidebar({ user, onSignOut, isOpen = false, onClose }: Si
       {isOpen && (
         <div
           onClick={onClose}
-          className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-40 lg:hidden transition-opacity"
+          className="fixed inset-0 bg-ink/50 backdrop-blur-sm z-40 lg:hidden transition-opacity"
           aria-hidden="true"
         />
       )}
@@ -130,24 +130,24 @@ export default function Sidebar({ user, onSignOut, isOpen = false, onClose }: Si
       {/* Sidebar container */}
       <aside
         id="sidebar"
-        className={`fixed top-0 bottom-0 left-0 w-64 bg-slate-950/95 backdrop-blur-xl border-r border-slate-800/80 flex flex-col z-50 transition-transform duration-300 ease-in-out lg:translate-x-0 ${
+        className={`fixed top-0 bottom-0 left-0 w-64 bg-surface border-r border-border flex flex-col z-50 transition-transform duration-300 ease-in-out lg:translate-x-0 ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         {/* Brand / Logo Header */}
-        <div className="h-16 px-5 border-b border-slate-800/80 flex items-center justify-between shrink-0">
+        <div className="h-16 px-5 border-b border-border flex items-center justify-between shrink-0">
           <Link href={user.role === 'CUSTOMER' ? '/portal/subscriptions' : '/dashboard'} className="flex items-center gap-3 group">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-violet-500 shadow-md shadow-blue-500/25 flex items-center justify-center font-black text-white text-base tracking-wider group-hover:scale-105 transition-transform">
+            <div className="w-9 h-9 rounded-xl bg-primary text-primary-ink shadow-sm flex items-center justify-center font-black text-base tracking-wider group-hover:opacity-90 transition-opacity">
               B
             </div>
             <div className="flex flex-col">
-              <span className="font-bold text-base text-white tracking-tight flex items-center gap-1.5">
+              <span className="font-bold text-base text-ink tracking-tight flex items-center gap-1.5">
                 Brightloop
-                <span className="text-[10px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded-full bg-blue-500/20 text-blue-300 border border-blue-500/30">
+                <span className="text-[10px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">
                   Pro
                 </span>
               </span>
-              <span className="text-[11px] text-slate-400 font-medium tracking-wide">
+              <span className="text-[11px] text-muted font-medium tracking-wide">
                 Billing & Subscription
               </span>
             </div>
@@ -156,7 +156,7 @@ export default function Sidebar({ user, onSignOut, isOpen = false, onClose }: Si
           {/* Close button for mobile */}
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/60 lg:hidden"
+            className="p-1.5 rounded-lg text-muted hover:text-ink hover:bg-bg lg:hidden"
             aria-label="Close sidebar"
           >
             <CloseIcon size={20} />
@@ -167,7 +167,7 @@ export default function Sidebar({ user, onSignOut, isOpen = false, onClose }: Si
         <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-6">
           {filteredSections.map((section) => (
             <div key={section.title} className="space-y-1">
-              <div className="px-3 text-[11px] font-semibold uppercase tracking-wider text-slate-400 mb-1">
+              <div className="px-3 text-[11px] font-semibold uppercase tracking-wider text-muted mb-1">
                 {section.title}
               </div>
               {section.items.map((item) => {
@@ -181,16 +181,16 @@ export default function Sidebar({ user, onSignOut, isOpen = false, onClose }: Si
                     onClick={onClose}
                     className={`flex items-center justify-between px-3 py-2 rounded-xl text-sm font-medium transition-all group relative ${
                       isActive
-                        ? 'bg-gradient-to-r from-blue-600/20 via-indigo-600/15 to-transparent text-white border-l-2 border-blue-500 shadow-sm'
-                        : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/60'
+                        ? 'bg-primary/10 text-primary border-l-2 border-primary font-semibold'
+                        : 'text-muted hover:text-ink hover:bg-bg'
                     }`}
                   >
                     <div className="flex items-center gap-3">
                       <div
                         className={`p-1.5 rounded-lg transition-colors ${
                           isActive
-                            ? 'text-blue-400 bg-blue-500/10'
-                            : 'text-slate-400 group-hover:text-slate-200 group-hover:bg-slate-800/50'
+                            ? 'text-primary bg-primary/15'
+                            : 'text-muted group-hover:text-ink'
                         }`}
                       >
                         <IconComponent size={18} />
@@ -199,13 +199,13 @@ export default function Sidebar({ user, onSignOut, isOpen = false, onClose }: Si
                     </div>
 
                     {item.badge && (
-                      <span className="px-2 py-0.5 text-[10px] font-semibold rounded-full bg-blue-500/20 text-blue-300 border border-blue-500/30">
+                      <span className="px-2 py-0.5 text-[10px] font-semibold rounded-full bg-primary/10 text-primary border border-primary/20">
                         {item.badge}
                       </span>
                     )}
 
                     {isActive && (
-                      <div className="w-1.5 h-1.5 rounded-full bg-blue-400 shadow-sm shadow-blue-400" />
+                      <div className="w-1.5 h-1.5 rounded-full bg-primary" />
                     )}
                   </Link>
                 );
@@ -215,12 +215,12 @@ export default function Sidebar({ user, onSignOut, isOpen = false, onClose }: Si
 
           {/* Quick Info Box in Admin/Staff */}
           {user.role !== 'CUSTOMER' && (
-            <div className="mx-1 p-3.5 rounded-xl bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800/90 shadow-inner">
-              <div className="flex items-center gap-2 text-xs font-semibold text-slate-300 mb-1">
-                <SparklesIcon size={14} className="text-amber-400" />
+            <div className="mx-1 p-3.5 rounded-xl bg-bg border border-border">
+              <div className="flex items-center gap-2 text-xs font-semibold text-ink mb-1">
+                <SparklesIcon size={14} className="text-accent" />
                 <span>Automated Billing</span>
               </div>
-              <p className="text-[11px] text-slate-400 leading-relaxed">
+              <p className="text-[11px] text-muted leading-relaxed">
                 Catch-up intervals and gap-free numbering are active.
               </p>
             </div>
@@ -228,33 +228,33 @@ export default function Sidebar({ user, onSignOut, isOpen = false, onClose }: Si
         </nav>
 
         {/* User Profile Footer */}
-        <div className="p-3 border-t border-slate-800/80 bg-slate-950 shrink-0">
-          <div className="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800/60 flex items-center justify-between gap-3 mb-2">
+        <div className="p-3 border-t border-border bg-surface shrink-0">
+          <div className="p-2.5 rounded-xl bg-bg border border-border flex items-center justify-between gap-3 mb-2">
             <div className="flex items-center gap-2.5 min-w-0">
               <div className="relative">
-                <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center font-bold text-white text-xs shadow-md shadow-blue-500/20 shrink-0">
+                <div className="w-9 h-9 rounded-xl bg-primary text-primary-ink flex items-center justify-center font-bold text-xs shadow-sm shrink-0">
                   {initials}
                 </div>
-                <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-slate-950" />
+                <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-success ring-2 ring-surface" />
               </div>
               <div className="min-w-0">
-                <div className="text-xs font-semibold text-white truncate">
+                <div className="text-xs font-semibold text-ink truncate">
                   {user.firstName} {user.lastName}
                 </div>
-                <div className="text-[11px] text-slate-400 font-mono truncate">
+                <div className="text-[11px] text-muted font-mono truncate">
                   {user.email}
                 </div>
               </div>
             </div>
 
-            <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border shrink-0 ${getRoleBadgeColor(user.role)}`}>
+            <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border shrink-0 ${getRoleBadgeClass(user.role)}`}>
               {user.role}
             </span>
           </div>
 
           <button
             onClick={onSignOut}
-            className="w-full flex items-center justify-center gap-2 px-3 py-2 text-xs font-medium text-slate-400 hover:text-red-400 hover:bg-red-500/10 rounded-xl border border-transparent hover:border-red-500/20 transition-all"
+            className="w-full flex items-center justify-center gap-2 px-3 py-2 text-xs font-medium text-muted hover:text-danger hover:bg-danger/10 rounded-xl border border-transparent hover:border-danger/20 transition-all"
           >
             <LogOutIcon size={15} />
             <span>Sign Out</span>

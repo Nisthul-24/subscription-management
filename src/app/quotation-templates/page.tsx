@@ -38,10 +38,10 @@ export default function QuotationTemplatesPage() {
       <div className="space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-white">
+            <h1 className="text-2xl font-bold tracking-tight text-ink">
               Quotation Templates
             </h1>
-            <p className="text-sm text-slate-400 mt-1">
+            <p className="text-sm text-muted mt-1">
               Pre-configured product bundles and plan tiers to quickly draft subscriptions.
             </p>
           </div>
@@ -49,11 +49,11 @@ export default function QuotationTemplatesPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {loading ? (
-            <div className="col-span-full py-16 text-center text-slate-500 text-xs">
+            <div className="col-span-full py-16 text-center text-muted text-xs">
               Loading quotation templates...
             </div>
           ) : templates.length === 0 ? (
-            <div className="col-span-full py-16 text-center text-slate-500 text-xs">
+            <div className="col-span-full py-16 text-center text-muted text-xs">
               No quotation templates configured yet.
             </div>
           ) : (
@@ -61,39 +61,39 @@ export default function QuotationTemplatesPage() {
               const total = tmpl.lines.reduce((s, l) => s + l.quantity * l.unitPriceCents, 0);
 
               return (
-                <div key={tmpl.id} className="card p-6 border-slate-800 space-y-4 flex flex-col justify-between">
+                <div key={tmpl.id} className="card p-6 border-border space-y-4 flex flex-col justify-between">
                   <div>
                     <div className="flex items-start justify-between gap-2 mb-2">
-                      <h3 className="text-base font-bold text-white">{tmpl.name}</h3>
-                      <span className="badge badge-info text-[10px]">
+                      <h3 className="text-base font-bold text-ink">{tmpl.name}</h3>
+                      <span className="badge badge-accent text-[10px]">
                         {tmpl.validDays}d validity
                       </span>
                     </div>
 
-                    <div className="text-xs text-slate-400 mb-4">
-                      Plan: <span className="font-semibold text-slate-200">{tmpl.plan.name}</span> ({tmpl.plan.billingPeriod.toLowerCase()})
+                    <div className="text-xs text-muted mb-4">
+                      Plan: <span className="font-semibold text-ink">{tmpl.plan.name}</span> ({tmpl.plan.billingPeriod.toLowerCase()})
                     </div>
 
-                    <div className="space-y-2 pt-2 border-t border-slate-800/80">
-                      <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+                    <div className="space-y-2 pt-2 border-t border-border/80">
+                      <div className="text-[11px] font-semibold text-muted uppercase tracking-wider">
                         Included Products:
                       </div>
                       {tmpl.lines.map((l) => (
                         <div key={l.id} className="flex justify-between text-xs py-1">
-                          <span className="text-slate-300">
+                          <span className="text-ink">
                             {l.quantity}x {l.product.name}
-                            {l.variant && <span className="text-blue-400 ml-1">({l.variant.value})</span>}
+                            {l.variant && <span className="text-primary ml-1">({l.variant.value})</span>}
                           </span>
-                          <span className="font-medium text-white">{formatMoney(l.quantity * l.unitPriceCents)}</span>
+                          <span className="font-medium text-ink">{formatMoney(l.quantity * l.unitPriceCents)}</span>
                         </div>
                       ))}
                     </div>
                   </div>
 
-                  <div className="pt-4 border-t border-slate-800 flex items-center justify-between">
+                  <div className="pt-4 border-t border-border flex items-center justify-between">
                     <div>
-                      <div className="text-[10px] text-slate-400 uppercase font-semibold">Bundle Total</div>
-                      <div className="text-lg font-extrabold text-blue-400">{formatMoney(total)}</div>
+                      <div className="text-[10px] text-muted uppercase font-semibold">Bundle Total</div>
+                      <div className="text-lg font-extrabold text-primary">{formatMoney(total)}</div>
                     </div>
                   </div>
                 </div>

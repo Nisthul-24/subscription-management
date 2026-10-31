@@ -95,7 +95,7 @@ export default function UsersPage() {
 
   const getRoleBadge = (r: string) => {
     if (r === 'ADMIN') return 'badge badge-danger';
-    if (r === 'STAFF') return 'badge badge-info';
+    if (r === 'STAFF') return 'badge badge-accent';
     return 'badge badge-neutral';
   };
 
@@ -104,10 +104,10 @@ export default function UsersPage() {
       <div className="space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-white">
+            <h1 className="text-2xl font-bold tracking-tight text-ink">
               User & Role Management
             </h1>
-            <p className="text-sm text-slate-400 mt-1">
+            <p className="text-sm text-muted mt-1">
               Administer team accounts, assign staff permissions, and review audit accesses.
             </p>
           </div>
@@ -121,7 +121,7 @@ export default function UsersPage() {
           </button>
         </div>
 
-        <div className="card border-slate-800 overflow-hidden">
+        <div className="card border-border overflow-hidden">
           <div className="overflow-x-auto">
             <table className="table w-full">
               <thead>
@@ -137,17 +137,17 @@ export default function UsersPage() {
               <tbody>
                 {loading ? (
                   <tr>
-                    <td colSpan={6} className="text-center py-12 text-slate-500 text-xs">
+                    <td colSpan={6} className="text-center py-12 text-muted text-xs">
                       Loading users...
                     </td>
                   </tr>
                 ) : (
                   users.map((u) => (
                     <tr key={u.id}>
-                      <td className="text-xs font-semibold text-white">
+                      <td className="text-xs font-semibold text-ink">
                         {u.firstName} {u.lastName}
                       </td>
-                      <td className="text-xs font-mono text-blue-400">
+                      <td className="text-xs font-mono text-primary">
                         {u.email}
                       </td>
                       <td>
@@ -155,13 +155,13 @@ export default function UsersPage() {
                           {u.role}
                         </span>
                       </td>
-                      <td className="text-xs text-slate-400">
+                      <td className="text-xs text-muted">
                         {u.phone || '—'}
                       </td>
-                      <td className="text-xs text-slate-300">
+                      <td className="text-xs text-ink">
                         {u.company || 'Brightloop'}
                       </td>
-                      <td className="text-xs text-slate-400">
+                      <td className="text-xs text-muted">
                         {new Date(u.createdAt).toLocaleDateString()}
                       </td>
                     </tr>
@@ -174,17 +174,17 @@ export default function UsersPage() {
 
         {/* Modal: Create Staff User */}
         {isModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-            <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md p-6 shadow-2xl space-y-4">
-              <div className="flex justify-between items-center pb-3 border-b border-slate-800">
-                <h3 className="text-base font-bold text-white">Create Staff Member</h3>
-                <button onClick={() => setIsModalOpen(false)} className="text-slate-400 hover:text-white">✕</button>
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/50 backdrop-blur-sm">
+            <div className="bg-surface border border-border rounded-2xl w-full max-w-md p-6 shadow-2xl space-y-4">
+              <div className="flex justify-between items-center pb-3 border-b border-border">
+                <h3 className="text-base font-bold text-ink">Create Staff Member</h3>
+                <button onClick={() => setIsModalOpen(false)} className="text-muted hover:text-ink">✕</button>
               </div>
 
               <form onSubmit={handleCreate} className="space-y-4">
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1">First Name</label>
+                    <label className="block text-xs font-semibold text-ink mb-1">First Name</label>
                     <input
                       type="text"
                       required
@@ -195,7 +195,7 @@ export default function UsersPage() {
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1">Last Name</label>
+                    <label className="block text-xs font-semibold text-ink mb-1">Last Name</label>
                     <input
                       type="text"
                       required
@@ -208,7 +208,7 @@ export default function UsersPage() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">Email Address</label>
+                  <label className="block text-xs font-semibold text-ink mb-1">Email Address</label>
                   <input
                     type="email"
                     required
@@ -221,7 +221,7 @@ export default function UsersPage() {
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1">Role</label>
+                    <label className="block text-xs font-semibold text-ink mb-1">Role</label>
                     <select
                       value={role}
                       onChange={(e) => setRole(e.target.value as 'STAFF' | 'ADMIN')}
@@ -233,7 +233,7 @@ export default function UsersPage() {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1">Phone</label>
+                    <label className="block text-xs font-semibold text-ink mb-1">Phone</label>
                     <input
                       type="tel"
                       value={phone}
@@ -245,7 +245,7 @@ export default function UsersPage() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">Password</label>
+                  <label className="block text-xs font-semibold text-ink mb-1">Password</label>
                   <input
                     type="password"
                     required
@@ -255,27 +255,27 @@ export default function UsersPage() {
                     className="input w-full text-xs"
                   />
 
-                  <div className="mt-2.5 p-2.5 rounded-lg bg-slate-950 border border-slate-800 text-[11px] grid grid-cols-2 gap-1.5">
-                    <div className={`flex items-center gap-1 ${hasMinLength ? 'text-emerald-400' : 'text-slate-500'}`}>
+                  <div className="mt-2.5 p-2.5 rounded-lg bg-bg border border-border text-[11px] grid grid-cols-2 gap-1.5">
+                    <div className={`flex items-center gap-1 ${hasMinLength ? 'text-success' : 'text-muted'}`}>
                       <span>{hasMinLength ? '✓' : '○'}</span>
                       <span>≥ 9 chars</span>
                     </div>
-                    <div className={`flex items-center gap-1 ${hasUpper ? 'text-emerald-400' : 'text-slate-500'}`}>
+                    <div className={`flex items-center gap-1 ${hasUpper ? 'text-success' : 'text-muted'}`}>
                       <span>{hasUpper ? '✓' : '○'}</span>
                       <span>1 uppercase</span>
                     </div>
-                    <div className={`flex items-center gap-1 ${hasLower ? 'text-emerald-400' : 'text-slate-500'}`}>
+                    <div className={`flex items-center gap-1 ${hasLower ? 'text-success' : 'text-muted'}`}>
                       <span>{hasLower ? '✓' : '○'}</span>
                       <span>1 lowercase</span>
                     </div>
-                    <div className={`flex items-center gap-1 ${hasSpecial ? 'text-emerald-400' : 'text-slate-500'}`}>
+                    <div className={`flex items-center gap-1 ${hasSpecial ? 'text-success' : 'text-muted'}`}>
                       <span>{hasSpecial ? '✓' : '○'}</span>
                       <span>1 special</span>
                     </div>
                   </div>
                 </div>
 
-                <div className="flex justify-end gap-3 pt-3 border-t border-slate-800">
+                <div className="flex justify-end gap-3 pt-3 border-t border-border">
                   <button type="button" onClick={() => setIsModalOpen(false)} className="btn btn-secondary text-xs">Cancel</button>
                   <button
                     type="submit"

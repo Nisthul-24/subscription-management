@@ -95,10 +95,10 @@ export default function PlansPage() {
       <div className="space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-white">
+            <h1 className="text-2xl font-bold tracking-tight text-ink">
               Subscription Plans
             </h1>
-            <p className="text-sm text-slate-400 mt-1">
+            <p className="text-sm text-muted mt-1">
               Billing frequencies, minimum quantities, lifecycle behavior flags, and renewal terms.
             </p>
           </div>
@@ -114,53 +114,53 @@ export default function PlansPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {loading ? (
-            <div className="col-span-full py-16 text-center text-slate-500 text-xs">
+            <div className="col-span-full py-16 text-center text-muted text-xs">
               Loading plans...
             </div>
           ) : plans.length === 0 ? (
-            <div className="col-span-full py-16 text-center text-slate-500 text-xs">
+            <div className="col-span-full py-16 text-center text-muted text-xs">
               No plans configured yet.
             </div>
           ) : (
             plans.map((pl) => (
-              <div key={pl.id} className="card p-6 border-slate-800 space-y-4 flex flex-col justify-between">
+              <div key={pl.id} className="card p-6 border-border space-y-4 flex flex-col justify-between">
                 <div>
                   <div className="flex items-start justify-between gap-2 mb-2">
-                    <h3 className="text-base font-bold text-white">{pl.name}</h3>
-                    <span className="badge badge-info text-[10px] uppercase">{pl.billingPeriod}</span>
+                    <h3 className="text-base font-bold text-ink">{pl.name}</h3>
+                    <span className="badge badge-accent text-[10px] uppercase">{pl.billingPeriod}</span>
                   </div>
 
-                  <div className="text-2xl font-extrabold text-blue-400 mb-4">
+                  <div className="text-2xl font-extrabold text-primary mb-4">
                     {formatMoney(pl.priceCents)}
-                    <span className="text-xs font-normal text-slate-400 ml-1">
+                    <span className="text-xs font-normal text-muted ml-1">
                       / {pl.billingPeriod.toLowerCase()}
                     </span>
                   </div>
 
-                  <div className="space-y-2 pt-2 border-t border-slate-800/80 text-xs">
-                    <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">
+                  <div className="space-y-2 pt-2 border-t border-border/80 text-xs">
+                    <div className="text-[11px] font-semibold text-muted uppercase tracking-wider mb-1.5">
                       Lifecycle Rules:
                     </div>
-                    <div className="flex items-center gap-2 text-slate-300">
-                      <span className={pl.pausable ? 'text-emerald-400' : 'text-slate-500'}>
+                    <div className="flex items-center gap-2 text-ink">
+                      <span className={pl.pausable ? 'text-success' : 'text-muted'}>
                         {pl.pausable ? '✓' : '✕'}
                       </span>
                       <span>Can Pause Subscription</span>
                     </div>
-                    <div className="flex items-center gap-2 text-slate-300">
-                      <span className={pl.closableEarly ? 'text-emerald-400' : 'text-slate-500'}>
+                    <div className="flex items-center gap-2 text-ink">
+                      <span className={pl.closableEarly ? 'text-success' : 'text-muted'}>
                         {pl.closableEarly ? '✓' : '✕'}
                       </span>
                       <span>Can Close Early</span>
                     </div>
-                    <div className="flex items-center gap-2 text-slate-300">
-                      <span className={pl.renewable ? 'text-emerald-400' : 'text-slate-500'}>
+                    <div className="flex items-center gap-2 text-ink">
+                      <span className={pl.renewable ? 'text-success' : 'text-muted'}>
                         {pl.renewable ? '✓' : '✕'}
                       </span>
                       <span>Auto-Renewable</span>
                     </div>
-                    <div className="flex items-center gap-2 text-slate-300">
-                      <span className={pl.autoCloseAtEnd ? 'text-amber-400' : 'text-slate-500'}>
+                    <div className="flex items-center gap-2 text-ink">
+                      <span className={pl.autoCloseAtEnd ? 'text-warning' : 'text-muted'}>
                         {pl.autoCloseAtEnd ? '✓' : '✕'}
                       </span>
                       <span>Auto-Close on Expiration</span>
@@ -168,7 +168,7 @@ export default function PlansPage() {
                   </div>
                 </div>
 
-                <div className="pt-3 border-t border-slate-800 text-xs text-slate-400 flex justify-between">
+                <div className="pt-3 border-t border-border text-xs text-muted flex justify-between">
                   <span>Min Quantity: {pl.minQuantity}</span>
                   <span>{pl._count?.subscriptions || 0} active subscriptions</span>
                 </div>
@@ -179,16 +179,16 @@ export default function PlansPage() {
 
         {/* Modal: Create Plan */}
         {isModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-            <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md p-6 shadow-2xl space-y-4">
-              <div className="flex justify-between items-center pb-3 border-b border-slate-800">
-                <h3 className="text-base font-bold text-white">Create Plan</h3>
-                <button onClick={() => setIsModalOpen(false)} className="text-slate-400 hover:text-white">✕</button>
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/50 backdrop-blur-sm">
+            <div className="bg-surface border border-border rounded-2xl w-full max-w-md p-6 shadow-2xl space-y-4">
+              <div className="flex justify-between items-center pb-3 border-b border-border">
+                <h3 className="text-base font-bold text-ink">Create Plan</h3>
+                <button onClick={() => setIsModalOpen(false)} className="text-muted hover:text-ink">✕</button>
               </div>
 
               <form onSubmit={handleCreatePlan} className="space-y-4">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">Plan Name</label>
+                  <label className="block text-xs font-semibold text-ink mb-1">Plan Name</label>
                   <input
                     type="text"
                     required
@@ -201,7 +201,7 @@ export default function PlansPage() {
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1">Billing Period</label>
+                    <label className="block text-xs font-semibold text-ink mb-1">Billing Period</label>
                     <select
                       value={billingPeriod}
                       onChange={(e) => setBillingPeriod(e.target.value)}
@@ -215,7 +215,7 @@ export default function PlansPage() {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1">Base Price ($)</label>
+                    <label className="block text-xs font-semibold text-ink mb-1">Base Price ($)</label>
                     <input
                       type="number"
                       step="0.01"
@@ -230,7 +230,7 @@ export default function PlansPage() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">Minimum Quantity</label>
+                  <label className="block text-xs font-semibold text-ink mb-1">Minimum Quantity</label>
                   <input
                     type="number"
                     min="1"
@@ -242,8 +242,8 @@ export default function PlansPage() {
                 </div>
 
                 {/* Behavioral Switches */}
-                <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-2 text-xs">
-                  <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-2">
+                <div className="p-3 rounded-xl bg-bg border border-border space-y-2 text-xs">
+                  <div className="text-[11px] font-semibold text-muted uppercase tracking-wider mb-2">
                     Behavioral Switches:
                   </div>
 
@@ -252,9 +252,9 @@ export default function PlansPage() {
                       type="checkbox"
                       checked={pausable}
                       onChange={(e) => setPausable(e.target.checked)}
-                      className="rounded bg-slate-900 border-slate-700 text-blue-600 focus:ring-0"
+                      className="rounded bg-surface border-border text-primary focus:ring-0"
                     />
-                    <span className="text-slate-200">Allow Customer to Pause</span>
+                    <span className="text-ink">Allow Customer to Pause</span>
                   </label>
 
                   <label className="flex items-center gap-2 cursor-pointer">
@@ -262,9 +262,9 @@ export default function PlansPage() {
                       type="checkbox"
                       checked={closableEarly}
                       onChange={(e) => setClosableEarly(e.target.checked)}
-                      className="rounded bg-slate-900 border-slate-700 text-blue-600 focus:ring-0"
+                      className="rounded bg-surface border-border text-primary focus:ring-0"
                     />
-                    <span className="text-slate-200">Allow Early Cancellation</span>
+                    <span className="text-ink">Allow Early Cancellation</span>
                   </label>
 
                   <label className="flex items-center gap-2 cursor-pointer">
@@ -272,9 +272,9 @@ export default function PlansPage() {
                       type="checkbox"
                       checked={renewable}
                       onChange={(e) => setRenewable(e.target.checked)}
-                      className="rounded bg-slate-900 border-slate-700 text-blue-600 focus:ring-0"
+                      className="rounded bg-surface border-border text-primary focus:ring-0"
                     />
-                    <span className="text-slate-200">Auto-Renew at End of Term</span>
+                    <span className="text-ink">Auto-Renew at End of Term</span>
                   </label>
 
                   <label className="flex items-center gap-2 cursor-pointer">
@@ -282,13 +282,13 @@ export default function PlansPage() {
                       type="checkbox"
                       checked={autoCloseAtEnd}
                       onChange={(e) => setAutoCloseAtEnd(e.target.checked)}
-                      className="rounded bg-slate-900 border-slate-700 text-blue-600 focus:ring-0"
+                      className="rounded bg-surface border-border text-primary focus:ring-0"
                     />
-                    <span className="text-slate-200">Auto-Close upon Expiration Date</span>
+                    <span className="text-ink">Auto-Close upon Expiration Date</span>
                   </label>
                 </div>
 
-                <div className="flex justify-end gap-3 pt-3 border-t border-slate-800">
+                <div className="flex justify-end gap-3 pt-3 border-t border-border">
                   <button type="button" onClick={() => setIsModalOpen(false)} className="btn btn-secondary text-xs">Cancel</button>
                   <button type="submit" disabled={submitting} className="btn btn-primary text-xs font-medium">
                     {submitting ? 'Creating...' : 'Create Plan'}

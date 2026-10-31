@@ -45,16 +45,16 @@ export default function PaymentsPage() {
       <div className="space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-white">
+            <h1 className="text-2xl font-bold tracking-tight text-ink">
               Payments & Transactions
             </h1>
-            <p className="text-sm text-slate-400 mt-1">
+            <p className="text-sm text-muted mt-1">
               Audit log of cash collections, card settlements, wire confirmations, and notes.
             </p>
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="px-4 py-2 rounded-xl bg-slate-900 border border-slate-800 text-xs font-semibold text-emerald-400">
+            <div className="px-4 py-2 rounded-xl bg-surface border border-border text-xs font-semibold text-success">
               Total Settled: {formatMoney(totalCollectedCents)}
             </div>
             <a
@@ -68,7 +68,7 @@ export default function PaymentsPage() {
           </div>
         </div>
 
-        <div className="card border-slate-800 overflow-hidden">
+        <div className="card border-border overflow-hidden">
           <div className="overflow-x-auto">
             <table className="table w-full">
               <thead>
@@ -85,42 +85,42 @@ export default function PaymentsPage() {
               <tbody>
                 {loading ? (
                   <tr>
-                    <td colSpan={7} className="text-center py-12 text-slate-500 text-xs">
+                    <td colSpan={7} className="text-center py-12 text-muted text-xs">
                       Loading payment records...
                     </td>
                   </tr>
                 ) : payments.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="text-center py-12 text-slate-500 text-xs">
+                    <td colSpan={7} className="text-center py-12 text-muted text-xs">
                       No payments recorded yet. Invoices can be paid directly from the Invoices page.
                     </td>
                   </tr>
                 ) : (
                   payments.map((p) => (
                     <tr key={p.id}>
-                      <td className="text-xs text-slate-400">
+                      <td className="text-xs text-muted">
                         {new Date(p.paymentDate).toLocaleDateString()}
                       </td>
-                      <td className="font-mono text-xs font-semibold text-blue-400">
+                      <td className="font-mono text-xs font-semibold text-primary">
                         <Link href="/invoices" className="hover:underline">
                           {p.invoice.number}
                         </Link>
                       </td>
-                      <td className="text-xs font-medium text-white">
+                      <td className="text-xs font-medium text-ink">
                         {p.invoice.customer.company || `${p.invoice.customer.firstName} ${p.invoice.customer.lastName}`}
                       </td>
-                      <td className="text-xs font-bold text-emerald-400">
+                      <td className="text-xs font-bold text-success">
                         +{formatMoney(p.amountCents)}
                       </td>
                       <td className="text-xs">
-                        <span className="px-2 py-0.5 rounded text-[11px] font-semibold bg-slate-800 text-slate-300 border border-slate-700">
+                        <span className="px-2 py-0.5 rounded text-[11px] font-semibold bg-surface text-ink border border-border">
                           {p.method.replace('_', ' ')}
                         </span>
                       </td>
-                      <td className="text-xs text-slate-400">
+                      <td className="text-xs text-muted">
                         {p.recordedBy.firstName} {p.recordedBy.lastName}
                       </td>
-                      <td className="text-xs text-slate-400 max-w-xs truncate">
+                      <td className="text-xs text-muted max-w-xs truncate">
                         {p.note || '—'}
                       </td>
                     </tr>

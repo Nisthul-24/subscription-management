@@ -4,7 +4,8 @@ import React, { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Sidebar from './Sidebar';
 import type { Role } from '@/lib/types';
-import { MenuIcon, BellIcon, SearchIcon, SparklesIcon } from '@/components/ui/Icons';
+import { MenuIcon, BellIcon } from '@/components/ui/Icons';
+import ThemeToggle from '@/components/ui/ThemeToggle';
 import Link from 'next/link';
 
 interface UserData {
@@ -42,7 +43,6 @@ export default function AppShell({ children, allowedRoles }: AppShellProps) {
         if (!isMounted) return;
 
         if (allowedRoles && !allowedRoles.includes(data.user.role)) {
-          // If customer tries to access admin or vice versa, redirect appropriately
           if (data.user.role === 'CUSTOMER') {
             router.push('/portal/subscriptions');
           } else {
@@ -77,18 +77,13 @@ export default function AppShell({ children, allowedRoles }: AppShellProps) {
 
   if (loading || !user) {
     return (
-      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center text-slate-400 gap-4 p-4 selection:bg-blue-600 selection:text-white">
-        {/* Glow backdrop */}
-        <div className="fixed inset-0 pointer-events-none overflow-hidden -z-10">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl" />
-        </div>
-
-        <div className="relative p-6 rounded-2xl bg-slate-900/60 border border-slate-800/80 shadow-2xl flex flex-col items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 shadow-lg shadow-blue-500/25 flex items-center justify-center font-black text-white text-xl animate-pulse">
+      <div className="min-h-screen bg-bg flex flex-col items-center justify-center text-muted gap-4 p-4 antialiased">
+        <div className="relative p-6 rounded-2xl bg-surface border border-border shadow-md flex flex-col items-center gap-4">
+          <div className="w-12 h-12 rounded-xl bg-primary text-primary-ink shadow-sm flex items-center justify-center font-black text-xl animate-pulse">
             B
           </div>
-          <div className="flex items-center gap-2.5 text-xs font-medium text-slate-300">
-            <div className="w-3.5 h-3.5 border-2 border-blue-500/30 border-t-blue-500 rounded-full animate-spin" />
+          <div className="flex items-center gap-2.5 text-xs font-medium text-ink">
+            <div className="w-3.5 h-3.5 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
             <span>Authenticating workspace session...</span>
           </div>
         </div>
@@ -96,14 +91,26 @@ export default function AppShell({ children, allowedRoles }: AppShellProps) {
     );
   }
 
-  // Format breadcrumb title
   const pathSegments = pathname.split('/').filter(Boolean);
   const currentTitle = pathSegments.length > 0
     ? pathSegments[pathSegments.length - 1].replace(/-/g, ' ')
     : 'Dashboard';
 
+  const getRoleBadgeClass = (role: Role) => {
+    switch (role) {
+      case 'ADMIN':
+        return 'role-pill-admin';
+      case 'STAFF':
+        return 'role-pill-staff';
+      case 'CUSTOMER':
+        return 'role-pill-customer';
+      default:
+        return 'bg-bg text-muted border-border';
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex selection:bg-blue-600 selection:text-white antialiased">
+    <div className="min-h-screen bg-bg text-ink flex antialiased">
       {/* Sidebar navigation */}
       <Sidebar
         user={user}
@@ -112,15 +119,15 @@ export default function AppShell({ children, allowedRoles }: AppShellProps) {
         onClose={() => setSidebarOpen(false)}
       />
 
-      {/* Main Content Area - with lg:pl-64 to match fixed sidebar */}
+      {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-w-0 lg:pl-64">
         {/* Top Header Bar */}
-        <header className="h-16 border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-xl px-4 sm:px-8 flex items-center justify-between sticky top-0 z-30 transition-all">
+        <header className="h-16 border-b border-border bg-surface px-4 sm:px-8 flex items-center justify-between sticky top-0 z-30 transition-colors">
           <div className="flex items-center gap-3">
             {/* Mobile menu button */}
             <button
               onClick={() => setSidebarOpen(true)}
-              className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-900 border border-transparent hover:border-slate-800 lg:hidden"
+              className="p-2 rounded-xl text-muted hover:text-ink hover:bg-bg border border-transparent hover:border-border lg:hidden"
               aria-label="Open sidebar"
             >
               <MenuIcon size={20} />
@@ -128,11 +135,11 @@ export default function AppShell({ children, allowedRoles }: AppShellProps) {
 
             {/* Breadcrumb path */}
             <div className="flex items-center gap-2 text-xs">
-              <Link href={user.role === 'CUSTOMER' ? '/portal/subscriptions' : '/dashboard'} className="font-semibold uppercase tracking-wider text-slate-400 hover:text-slate-200 transition-colors">
+              <Link href={user.role === 'CUSTOMER' ? '/portal/subscriptions' : '/dashboard'} className="font-semibold uppercase tracking-wider text-muted hover:text-ink transition-colors">
                 Workspace
               </Link>
-              <span className="text-slate-600">/</span>
-              <span className="font-semibold text-slate-100 capitalize bg-slate-900/60 px-2.5 py-1 rounded-lg border border-slate-800/60">
+              <span className="text-border">/</span>
+              <span className="font-semibold text-ink capitalize bg-bg px-2.5 py-1 rounded-lg border border-border">
                 {currentTitle}
               </span>
             </div>
@@ -140,34 +147,37 @@ export default function AppShell({ children, allowedRoles }: AppShellProps) {
 
           {/* Quick Header Actions */}
           <div className="flex items-center gap-3 sm:gap-4">
-            {/* Quick status beacon */}
-            <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/80 border border-slate-800/80 text-xs text-slate-300">
+            {/* Live status beacon */}
+            <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full bg-bg border border-border text-xs text-muted">
               <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-success" />
               </span>
-              <span className="text-[11px] font-medium text-slate-300">Live Sync</span>
+              <span className="text-[11px] font-medium text-ink">Live Sync</span>
             </div>
+
+            {/* Theme Toggle (Light / Dark) */}
+            <ThemeToggle />
 
             {/* Notification indicator */}
             <button
-              className="relative p-2 rounded-xl text-slate-400 hover:text-slate-200 hover:bg-slate-900 border border-slate-800/60 transition-colors"
+              className="relative p-2 rounded-xl text-muted hover:text-ink hover:bg-bg border border-border transition-colors"
               title="Notifications"
             >
               <BellIcon size={17} />
-              <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-blue-500" />
+              <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-primary" />
             </button>
 
             {/* User chip */}
-            <div className="flex items-center gap-2.5 pl-2 border-l border-slate-800">
-              <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center font-bold text-white text-xs shadow-md shadow-blue-500/20">
+            <div className="flex items-center gap-2.5 pl-2 border-l border-border">
+              <div className="w-8 h-8 rounded-xl bg-primary text-primary-ink flex items-center justify-center font-bold text-xs shadow-sm">
                 {`${user.firstName?.[0] || 'U'}${user.lastName?.[0] || ''}`.toUpperCase()}
               </div>
               <div className="hidden sm:block text-left">
-                <div className="text-xs font-semibold text-slate-200">
+                <div className="text-xs font-semibold text-ink">
                   {user.firstName} {user.lastName}
                 </div>
-                <div className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">
+                <div className={`text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.2 rounded-full inline-block border mt-0.5 ${getRoleBadgeClass(user.role)}`}>
                   {user.role}
                 </div>
               </div>

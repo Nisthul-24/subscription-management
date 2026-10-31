@@ -41,7 +41,7 @@ export default function PortalInvoicesPage() {
     }
     const s = status.toUpperCase();
     if (s === 'PAID') return 'badge badge-success';
-    if (s === 'CONFIRMED') return 'badge badge-info';
+    if (s === 'CONFIRMED') return 'badge badge-accent';
     return 'badge badge-warning';
   };
 
@@ -49,15 +49,15 @@ export default function PortalInvoicesPage() {
     <AppShell allowedRoles={['CUSTOMER']}>
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-white">
+          <h1 className="text-2xl font-bold tracking-tight text-ink">
             My Invoices & Billing
           </h1>
-          <p className="text-sm text-slate-400 mt-1">
+          <p className="text-sm text-muted mt-1">
             Download PDF receipts, inspect tax line breakdowns, and review payment status.
           </p>
         </div>
 
-        <div className="card border-slate-800 overflow-hidden">
+        <div className="card border-border overflow-hidden">
           <div className="overflow-x-auto">
             <table className="table w-full">
               <thead>
@@ -76,40 +76,40 @@ export default function PortalInvoicesPage() {
               <tbody>
                 {loading ? (
                   <tr>
-                    <td colSpan={9} className="text-center py-12 text-slate-500 text-xs">
+                    <td colSpan={9} className="text-center py-12 text-muted text-xs">
                       Loading invoices...
                     </td>
                   </tr>
                 ) : invoices.length === 0 ? (
                   <tr>
-                    <td colSpan={9} className="text-center py-12 text-slate-500 text-xs">
+                    <td colSpan={9} className="text-center py-12 text-muted text-xs">
                       No invoices have been billed to your account yet.
                     </td>
                   </tr>
                 ) : (
                   invoices.map((inv) => (
                     <tr key={inv.id}>
-                      <td className="font-mono text-xs font-bold text-blue-400">
+                      <td className="font-mono text-xs font-bold text-primary">
                         {inv.number}
                       </td>
-                      <td className="text-xs text-slate-300">
+                      <td className="text-xs text-ink">
                         {inv.subscription.number}
                       </td>
-                      <td className="text-xs text-slate-400">
+                      <td className="text-xs text-muted">
                         {new Date(inv.invoiceDate).toLocaleDateString()}
                       </td>
                       <td className="text-xs">
-                        <span className={inv.isOverdue ? 'text-red-400 font-bold' : 'text-slate-300'}>
+                        <span className={inv.isOverdue ? 'text-danger font-bold' : 'text-ink'}>
                           {new Date(inv.dueDate).toLocaleDateString()}
                         </span>
                       </td>
-                      <td className="text-xs font-bold text-white">
+                      <td className="text-xs font-bold text-ink">
                         {formatMoney(inv.totalCents)}
                       </td>
-                      <td className="text-xs font-medium text-emerald-400">
+                      <td className="text-xs font-medium text-success">
                         {formatMoney(inv.paidCents)}
                       </td>
-                      <td className="text-xs font-bold text-amber-300">
+                      <td className="text-xs font-bold text-warning">
                         {formatMoney(inv.remainingCents)}
                       </td>
                       <td>
@@ -122,7 +122,7 @@ export default function PortalInvoicesPage() {
                           href={`/api/invoices/${inv.id}/pdf`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="px-3 py-1 rounded-lg text-xs font-semibold bg-blue-600/20 text-blue-300 hover:bg-blue-600/30 border border-blue-500/30 inline-flex items-center gap-1.5"
+                          className="px-3 py-1 rounded-lg text-xs font-semibold bg-primary/20 text-primary hover:bg-primary/30 border border-primary/30 inline-flex items-center gap-1.5"
                         >
                           <span>📄</span>
                           <span>Download PDF</span>

@@ -67,18 +67,18 @@ export function passwordResetEmail(resetUrl: string, firstName: string): EmailOp
     subject: 'Reset your Brightloop password',
     html: `
       <div style="font-family: 'Inter', sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px;">
-        <h1 style="color: #1e293b; margin-bottom: 16px;">Password Reset</h1>
-        <p style="color: #475569; font-size: 16px; line-height: 1.6;">
+        <h1 style="color: #0F1E2E; margin-bottom: 16px;">Password Reset</h1>
+        <p style="color: #5B6B7A; font-size: 16px; line-height: 1.6;">
           Hi ${firstName},
         </p>
-        <p style="color: #475569; font-size: 16px; line-height: 1.6;">
+        <p style="color: #5B6B7A; font-size: 16px; line-height: 1.6;">
           We received a request to reset your password. Click the button below to choose a new password.
           This link will expire in 1 hour.
         </p>
         <div style="text-align: center; margin: 32px 0;">
           <a href="${resetUrl}" style="
             display: inline-block;
-            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            background: linear-gradient(135deg, #0E7C7B, #0A6362);
             color: white;
             padding: 14px 32px;
             border-radius: 8px;
@@ -87,11 +87,11 @@ export function passwordResetEmail(resetUrl: string, firstName: string): EmailOp
             font-size: 16px;
           ">Reset Password</a>
         </div>
-        <p style="color: #94a3b8; font-size: 14px;">
+        <p style="color: #5B6B7A; font-size: 14px;">
           If you didn't request this, you can safely ignore this email.
         </p>
-        <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 32px 0;" />
-        <p style="color: #94a3b8; font-size: 12px;">
+        <hr style="border: none; border-top: 1px solid #DDE5EA; margin: 32px 0;" />
+        <p style="color: #5B6B7A; font-size: 12px;">
           © Brightloop Subscription Management
         </p>
       </div>
@@ -110,34 +110,34 @@ export function invoiceEmail(
     subject: `Invoice ${invoiceNumber} from Brightloop`,
     html: `
       <div style="font-family: 'Inter', sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px;">
-        <h1 style="color: #1e293b; margin-bottom: 16px;">Invoice ${invoiceNumber}</h1>
-        <p style="color: #475569; font-size: 16px; line-height: 1.6;">
+        <h1 style="color: #0F1E2E; margin-bottom: 16px;">Invoice ${invoiceNumber}</h1>
+        <p style="color: #5B6B7A; font-size: 16px; line-height: 1.6;">
           Hi ${customerName},
         </p>
-        <p style="color: #475569; font-size: 16px; line-height: 1.6;">
+        <p style="color: #5B6B7A; font-size: 16px; line-height: 1.6;">
           A new invoice has been generated for your subscription.
         </p>
-        <div style="background: #f8fafc; border-radius: 12px; padding: 24px; margin: 24px 0;">
+        <div style="background: #F4F7F8; border-radius: 12px; padding: 24px; margin: 24px 0;">
           <table style="width: 100%; border-collapse: collapse;">
             <tr>
-              <td style="color: #64748b; padding: 8px 0;">Invoice Number</td>
-              <td style="color: #1e293b; font-weight: 600; text-align: right;">${invoiceNumber}</td>
+              <td style="color: #5B6B7A; padding: 8px 0;">Invoice Number</td>
+              <td style="color: #0F1E2E; font-weight: 600; text-align: right;">${invoiceNumber}</td>
             </tr>
             <tr>
-              <td style="color: #64748b; padding: 8px 0;">Total Amount</td>
-              <td style="color: #1e293b; font-weight: 600; text-align: right;">${totalFormatted}</td>
+              <td style="color: #5B6B7A; padding: 8px 0;">Total Amount</td>
+              <td style="color: #0F1E2E; font-weight: 600; text-align: right;">${totalFormatted}</td>
             </tr>
             <tr>
-              <td style="color: #64748b; padding: 8px 0;">Due Date</td>
-              <td style="color: #1e293b; font-weight: 600; text-align: right;">${dueDate}</td>
+              <td style="color: #5B6B7A; padding: 8px 0;">Due Date</td>
+              <td style="color: #0F1E2E; font-weight: 600; text-align: right;">${dueDate}</td>
             </tr>
           </table>
         </div>
-        <p style="color: #475569; font-size: 16px; line-height: 1.6;">
+        <p style="color: #5B6B7A; font-size: 16px; line-height: 1.6;">
           Please find the invoice PDF attached to this email.
         </p>
-        <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 32px 0;" />
-        <p style="color: #94a3b8; font-size: 12px;">
+        <hr style="border: none; border-top: 1px solid #DDE5EA; margin: 32px 0;" />
+        <p style="color: #5B6B7A; font-size: 12px;">
           © Brightloop Subscription Management
         </p>
       </div>

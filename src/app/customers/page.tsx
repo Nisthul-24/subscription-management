@@ -47,10 +47,10 @@ export default function CustomersPage() {
       <div className="space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-white">
+            <h1 className="text-2xl font-bold tracking-tight text-ink">
               Customer Accounts
             </h1>
-            <p className="text-sm text-slate-400 mt-1">
+            <p className="text-sm text-muted mt-1">
               Active clients, subscriber directory, and linked contract portfolios.
             </p>
           </div>
@@ -66,7 +66,7 @@ export default function CustomersPage() {
           </div>
         </div>
 
-        <div className="card border-slate-800 overflow-hidden">
+        <div className="card border-border overflow-hidden">
           <div className="overflow-x-auto">
             <table className="table w-full">
               <thead>
@@ -84,54 +84,54 @@ export default function CustomersPage() {
               <tbody>
                 {loading ? (
                   <tr>
-                    <td colSpan={8} className="text-center py-12 text-slate-500 text-xs">
+                    <td colSpan={8} className="text-center py-12 text-muted text-xs">
                       Loading customer accounts...
                     </td>
                   </tr>
                 ) : filtered.length === 0 ? (
                   <tr>
-                    <td colSpan={8} className="text-center py-12 text-slate-500 text-xs">
+                    <td colSpan={8} className="text-center py-12 text-muted text-xs">
                       No customers found matching &quot;{search}&quot;.
                     </td>
                   </tr>
                 ) : (
                   filtered.map((c) => (
                     <tr key={c.id}>
-                      <td className="text-xs font-semibold text-white">
+                      <td className="text-xs font-semibold text-ink">
                         {c.firstName} {c.lastName}
                       </td>
-                      <td className="text-xs text-slate-300 font-medium">
+                      <td className="text-xs text-ink font-medium">
                         {c.company || '—'}
                       </td>
-                      <td className="text-xs text-blue-400 font-mono">
+                      <td className="text-xs text-primary font-mono">
                         {c.email}
                       </td>
-                      <td className="text-xs text-slate-400">
+                      <td className="text-xs text-muted">
                         {c.phone || '—'}
                       </td>
-                      <td className="text-xs font-semibold text-white">
+                      <td className="text-xs font-semibold text-ink">
                         <Link
                           href={`/subscriptions?customerId=${c.id}`}
-                          className="hover:underline text-blue-400"
+                          className="hover:underline text-primary"
                         >
                           {c._count.subscriptions} active
                         </Link>
                       </td>
-                      <td className="text-xs font-semibold text-white">
+                      <td className="text-xs font-semibold text-ink">
                         <Link
                           href={`/invoices?customerId=${c.id}`}
-                          className="hover:underline text-indigo-400"
+                          className="hover:underline text-primary"
                         >
                           {c._count.invoices} records
                         </Link>
                       </td>
-                      <td className="text-xs text-slate-400">
+                      <td className="text-xs text-muted">
                         {new Date(c.createdAt).toLocaleDateString()}
                       </td>
                       <td className="text-right">
                         <Link
                           href={`/subscriptions?customerId=${c.id}`}
-                          className="px-2.5 py-1 rounded text-xs font-medium bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700"
+                          className="px-2.5 py-1 rounded text-xs font-medium bg-surface text-ink hover:text-ink hover:bg-border"
                         >
                           View Contracts →
                         </Link>

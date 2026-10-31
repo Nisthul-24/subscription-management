@@ -97,10 +97,10 @@ export default function DiscountRulesPage() {
       <div className="space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-white">
+            <h1 className="text-2xl font-bold tracking-tight text-ink">
               Discount Rules & Promotions
             </h1>
-            <p className="text-sm text-slate-400 mt-1">
+            <p className="text-sm text-muted mt-1">
               Automated discount matching during invoice generation (highest value wins per line).
             </p>
           </div>
@@ -114,7 +114,7 @@ export default function DiscountRulesPage() {
           </button>
         </div>
 
-        <div className="card border-slate-800 overflow-hidden">
+        <div className="card border-border overflow-hidden">
           <div className="overflow-x-auto">
             <table className="table w-full">
               <thead>
@@ -131,22 +131,22 @@ export default function DiscountRulesPage() {
               <tbody>
                 {loading ? (
                   <tr>
-                    <td colSpan={7} className="text-center py-12 text-slate-500 text-xs">
+                    <td colSpan={7} className="text-center py-12 text-muted text-xs">
                       Loading discount rules...
                     </td>
                   </tr>
                 ) : rules.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="text-center py-12 text-slate-500 text-xs">
+                    <td colSpan={7} className="text-center py-12 text-muted text-xs">
                       No discount rules configured yet.
                     </td>
                   </tr>
                 ) : (
                   rules.map((r) => (
                     <tr key={r.id}>
-                      <td className="text-xs font-semibold text-white">{r.name}</td>
-                      <td className="text-xs font-medium text-slate-300">{r.discountType}</td>
-                      <td className="text-xs font-bold text-emerald-400">
+                      <td className="text-xs font-semibold text-ink">{r.name}</td>
+                      <td className="text-xs font-medium text-ink">{r.discountType}</td>
+                      <td className="text-xs font-bold text-success">
                         {r.discountType === 'FIXED'
                           ? formatMoney(r.valueCents)
                           : `${(r.valueBps / 100).toFixed(2)}%`}
@@ -156,10 +156,10 @@ export default function DiscountRulesPage() {
                           {r.scope}
                         </span>
                       </td>
-                      <td className="text-xs text-slate-400">
+                      <td className="text-xs text-muted">
                         {r.minPurchaseCents > 0 ? formatMoney(r.minPurchaseCents) : 'None'}
                       </td>
-                      <td className="text-xs font-mono text-slate-300">
+                      <td className="text-xs font-mono text-ink">
                         {r.usageCount} / {r.usageLimit ?? '∞'}
                       </td>
                       <td>
@@ -177,16 +177,16 @@ export default function DiscountRulesPage() {
 
         {/* Modal */}
         {isModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-            <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md p-6 shadow-2xl space-y-4">
-              <div className="flex justify-between items-center pb-3 border-b border-slate-800">
-                <h3 className="text-base font-bold text-white">Create Discount Rule</h3>
-                <button onClick={() => setIsModalOpen(false)} className="text-slate-400 hover:text-white">✕</button>
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/50 backdrop-blur-sm">
+            <div className="bg-surface border border-border rounded-2xl w-full max-w-md p-6 shadow-2xl space-y-4">
+              <div className="flex justify-between items-center pb-3 border-b border-border">
+                <h3 className="text-base font-bold text-ink">Create Discount Rule</h3>
+                <button onClick={() => setIsModalOpen(false)} className="text-muted hover:text-ink">✕</button>
               </div>
 
               <form onSubmit={handleCreate} className="space-y-4">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">Rule Name</label>
+                  <label className="block text-xs font-semibold text-ink mb-1">Rule Name</label>
                   <input
                     type="text"
                     required
@@ -199,7 +199,7 @@ export default function DiscountRulesPage() {
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1">Discount Type</label>
+                    <label className="block text-xs font-semibold text-ink mb-1">Discount Type</label>
                     <select
                       value={discountType}
                       onChange={(e) => setDiscountType(e.target.value)}
@@ -211,7 +211,7 @@ export default function DiscountRulesPage() {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1">
+                    <label className="block text-xs font-semibold text-ink mb-1">
                       {discountType === 'PERCENTAGE' ? 'Rate (%)' : 'Amount ($)'}
                     </label>
                     <input
@@ -229,7 +229,7 @@ export default function DiscountRulesPage() {
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1">Applicable Scope</label>
+                    <label className="block text-xs font-semibold text-ink mb-1">Applicable Scope</label>
                     <select
                       value={scope}
                       onChange={(e) => setScope(e.target.value)}
@@ -241,7 +241,7 @@ export default function DiscountRulesPage() {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1">Min. Purchase ($)</label>
+                    <label className="block text-xs font-semibold text-ink mb-1">Min. Purchase ($)</label>
                     <input
                       type="number"
                       step="0.01"
@@ -255,7 +255,7 @@ export default function DiscountRulesPage() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">Usage Limit (Leave blank for unlimited)</label>
+                  <label className="block text-xs font-semibold text-ink mb-1">Usage Limit (Leave blank for unlimited)</label>
                   <input
                     type="number"
                     min="1"
@@ -266,7 +266,7 @@ export default function DiscountRulesPage() {
                   />
                 </div>
 
-                <div className="flex justify-end gap-3 pt-3 border-t border-slate-800">
+                <div className="flex justify-end gap-3 pt-3 border-t border-border">
                   <button type="button" onClick={() => setIsModalOpen(false)} className="btn btn-secondary text-xs">Cancel</button>
                   <button type="submit" disabled={submitting} className="btn btn-primary text-xs font-medium">
                     {submitting ? 'Creating...' : 'Create Rule'}
